@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Detalhes da situação"
+    android:textAlignment="center"
+    android:textSize="30dp">
+</TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Local Selecionado: "
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:id="@+id/txtLocalDetalhe">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detalhes da situação: "
+        android:textSize="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp">
+    </TextView>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:id="@+id/txtdetalhes">
+
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Voltar"
+        android:layout_marginTop="500dp"
+        android:textSize="20dp"
+        android:id="@+id/btvoltarsituacao">
+    </Button>
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Enviar"
+        android:textSize="20dp"
+        android:id="@+id/btEnvio"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="110dp">
+    </Button>
+    </LinearLayout>
+
+</LinearLayout>
