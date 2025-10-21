@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:layout_marginLeft="30dp">
+
+    </ImageView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Infralerta"
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="O Infralerta tem o objetivo de auxiliar na detecção de problemas de infraestrutura na cidade de Guarulhos através da coleta de denúncias de cidadãos. \n Vamos ajudar a construir uma cidade melhor?"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_marginTop="160dp">
+    </TextView>
+    
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="230dp"
+        android:text="Próximo"
+        android:textSize="20dp"
+        android:id="@+id/btproximo">
+
+    </Button>
+
+
+</LinearLayout>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="5dp">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Problema(s) de Infraestrutura"
+    android:textSize="30dp"
+    android:textAlignment="center">
+</TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:text="Local selecionado: "
+        android:id="@+id/txtLocal">
+    </TextView>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/radiog_problemas">
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Asfalto Danificado"
+        android:id="@+id/btasfalto"
+        android:layout_marginTop="60dp">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Vazamento de Esgoto"
+        android:id="@+id/btvazamento">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Falta de Energia (Postes)"
+        android:id="@+id/btfaltaposte">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Falta de Energia (Geral)"
+        android:id="@+id/btfaltageral">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Calçada Danificada"
+        android:id="@+id/btcalcada">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Árvore de Tamanho Anormal"
+        android:id="@+id/btarvoreanormal">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Ausência de Asfalto"
+        android:id="@+id/btausenciaasfalto">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Problema Semáforo"
+        android:id="@+id/btproblemasemaforo">
+    </RadioButton>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Falta de Indicação na Rua"
+        android:id="@+id/btindicacao">
+    </RadioButton>
+    </RadioGroup>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Próximo"
+        android:textSize="20dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="100dp"
+        android:id="@+id/btproximoinfra">
+    </Button>
+</LinearLayout>
