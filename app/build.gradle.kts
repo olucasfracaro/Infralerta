@@ -40,8 +40,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("org.osmdroid:osmdroid-android: 6.1.20")
-    implementation("org.osmdroid:osmdroid-wms: 2.28.0")
-    implementation("org.osmdroid:osmdroid-mapsforge:6.1.20")
-    implementation("org.osmdroid:osmdroid-geopackage:6.1.20")
+    implementation ("com.google.android.material:material:1.9.0")
+
 }
