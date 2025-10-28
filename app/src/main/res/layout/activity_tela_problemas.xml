@@ -9,7 +9,6 @@
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
     android:text="Problema(s) de Infraestrutura"
     android:textSize="30dp"
     android:textAlignment="center">
@@ -18,7 +17,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:textAlignment="center"
         android:textSize="20dp"
         android:text="Local selecionado: "

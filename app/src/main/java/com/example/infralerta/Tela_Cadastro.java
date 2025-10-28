@@ -50,7 +50,7 @@ public class Tela_Cadastro extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View view) {
         if (v.getId() == R.id.btCadastrarCad);{
             salvar();
         }
