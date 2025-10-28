@@ -4,7 +4,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,6 +17,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="Cadastrar no Infralerta"
         android:textStyle="bold"
         android:textAlignment="center"
@@ -25,19 +27,42 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="Nome de Usuário"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="20dp">
+        android:textSize="25dp">
     </TextView>
 
 
     <EditText
+        android:background="@drawable/edit_text_border"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtNomeCad"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="25dp">
+    </EditText>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="25dp">
+    </TextView>
+
+
+    <EditText
+        android:background="@drawable/edit_text_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtEmailCad"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:textSize="25dp">
     </EditText>
 
     <TextView
@@ -46,18 +71,22 @@
         android:text="Senha"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="20dp">
+        android:textSize="25dp">
     </TextView>
 
 
     <EditText
+        android:background="@drawable/edit_text_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtSenhaCad"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:inputType="textPassword">
+        android:inputType="textPassword"
+        android:textSize="25dp"
+        >
     </EditText>
+
 
     <TextView
         android:layout_width="match_parent"
@@ -65,18 +94,21 @@
         android:text="CPF"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="20dp">
+        android:textSize="25dp">
     </TextView>
-
+    
 
     <EditText
+        android:background="@drawable/edit_text_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtcpf"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:inputType="textPassword">
+        android:textSize="25dp">
     </EditText>
+
+
 
     <Button
         android:layout_width="250dp"
@@ -85,7 +117,7 @@
         android:text="Cadastrar-se"
         android:layout_marginLeft="75dp"
         android:id="@+id/btCadastrarCad"
-        android:layout_marginTop="120dp">
+        android:layout_marginTop="30dp">
     </Button>
     <Button
         android:layout_width="200dp"
@@ -95,7 +127,6 @@
         android:textSize="30dp"
         android:id="@+id/btEntrarCad">
     </Button>
-
 
 
 </LinearLayout>

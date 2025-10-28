@@ -4,7 +4,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <Button
         android:layout_width="100dp"
@@ -17,15 +18,39 @@
         android:id="@+id/btMais">
     </Button>
 
+    <!--
     <org.mapsforge.map.android.view.MapView
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:layout_gravity="center"
         android:id="@+id/MapaInfra">
-
-
     </org.mapsforge.map.android.view.MapView>
+-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="470dp"
+        android:background="@color/cinza">
 
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:src="@drawable/mapa"
+            android:id="@+id/btmapamapa"
+            android:backgroundTint="@color/roxo">
+
+        </ImageButton>
+
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:src="@drawable/denuncia"
+            android:id="@+id/btdenunciasmapa"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="250dp">
+        </ImageButton>
+    </LinearLayout>
 
 
 </LinearLayout>

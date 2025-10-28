@@ -4,7 +4,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,10 +17,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="Entrar no Infralerta"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:textSize="30dp">
+        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp">
     </TextView>
 
     <TextView
@@ -28,16 +32,18 @@
         android:text="Email"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="20dp">
+        android:textSize="25dp">
     </TextView>
 
 
     <EditText
+        android:background="@drawable/edit_text_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtEmail"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:textSize="25dp">
     </EditText>
 
     <TextView
@@ -46,24 +52,26 @@
         android:text="Senha"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="20dp">
+        android:textSize="25dp">
     </TextView>
 
 
     <EditText
+        android:background="@drawable/edit_text_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtSenha"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:inputType="textPassword">
+        android:inputType="textPassword"
+        android:textSize="25dp">
     </EditText>
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="150dp"
         android:text="Entrar"
         android:textSize="30dp"
         android:id="@+id/btEntrarLogin">

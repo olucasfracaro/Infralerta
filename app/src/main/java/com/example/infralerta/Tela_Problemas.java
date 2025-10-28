@@ -31,7 +31,6 @@ public class Tela_Problemas extends AppCompatActivity {
         });
         btproximoinfra = findViewById(R.id.btproximoinfra);
         txtLocal = findViewById(R.id.txtLocal);
-        radiogProblemas = findViewById(R.id.radiog_problemas);
         btasfalto = findViewById(R.id.btasfalto);
         btvazamento = findViewById(R.id.btvazamento);
         btfaltaposte = findViewById(R.id.btfaltaposte);

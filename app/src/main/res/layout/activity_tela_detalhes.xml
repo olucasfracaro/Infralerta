@@ -4,13 +4,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Detalhes da situação"
     android:textAlignment="center"
     android:textSize="30dp">
+    
 </TextView>
     <TextView
         android:layout_width="match_parent"
@@ -24,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Detalhes da situação: "
-        android:textSize="15dp"
+        android:textSize="25dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp">
     </TextView>
@@ -32,7 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:id="@+id/txtdetalhes">
+        android:id="@+id/txtdetalhes"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:minLines="6"
+        android:gravity="top|start"
+        android:maxLines="10"
+        android:scrollbars="vertical"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/edit_text_border"
+        >
 
     </EditText>
 
@@ -43,7 +54,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Voltar"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="400dp"
         android:textSize="20dp"
         android:id="@+id/btvoltarsituacao">
     </Button>
@@ -53,8 +64,8 @@
         android:text="Enviar"
         android:textSize="20dp"
         android:id="@+id/btEnvio"
-        android:layout_marginTop="500dp"
-        android:layout_marginLeft="110dp">
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="95dp">
     </Button>
     </LinearLayout>
 

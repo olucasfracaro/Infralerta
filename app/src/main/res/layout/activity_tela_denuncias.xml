@@ -4,7 +4,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,5 +16,32 @@
         >
     </TextView>
 
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="590dp"
+        android:background="@color/cinza">
+
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:src="@drawable/mapa"
+            android:id="@+id/btMapaDenunc">
+
+        </ImageButton>
+
+        <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:src="@drawable/denuncia"
+        android:backgroundTint="@color/roxo"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="250dp">
+        </ImageButton>
+    </LinearLayout>
 
 </LinearLayout>
