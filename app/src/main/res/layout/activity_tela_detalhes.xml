@@ -19,29 +19,27 @@
         android:layout_height="wrap_content"
         android:text="Local Selecionado: "
         android:textAlignment="center"
-        android:textSize="20dp"
-        android:id="@+id/txtLocalDetalhe">
+        android:textSize="20dp">
     </TextView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Detalhes da situação: "
         android:textSize="25dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp">
     </TextView>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:id="@+id/txtdetalhes"
         android:inputType="textMultiLine"
         android:lines="8"
         android:minLines="6"
         android:gravity="top|start"
         android:maxLines="10"
         android:scrollbars="vertical"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/edit_text_border"
         >
 
@@ -65,7 +63,7 @@
         android:textSize="20dp"
         android:id="@+id/btEnvio"
         android:layout_marginTop="400dp"
-        android:layout_marginLeft="95dp">
+        android:layout_marginStart="95dp">
     </Button>
     </LinearLayout>
 

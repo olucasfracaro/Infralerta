@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -26,12 +25,9 @@ public class MainActivity extends AppCompatActivity {
         });
         btproxima = findViewById(R.id.btproximo);
 
-        btproxima.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent login = new Intent(MainActivity.this, Tela_Login.class);
-                startActivity(login);
-            }
+        btproxima.setOnClickListener(view -> {
+            Intent login = new Intent(MainActivity.this, Tela_Login.class);
+            startActivity(login);
         });
     }
 }

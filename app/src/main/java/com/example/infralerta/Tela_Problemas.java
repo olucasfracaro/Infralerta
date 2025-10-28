@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -42,12 +41,9 @@ public class Tela_Problemas extends AppCompatActivity {
         btindicacao = findViewById(R.id.btindicacao);
 
 
-        btproximoinfra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);
-                startActivity(detalhes);
-            }
+        btproximoinfra.setOnClickListener(view -> {
+            Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);
+            startActivity(detalhes);
         });
 
     }

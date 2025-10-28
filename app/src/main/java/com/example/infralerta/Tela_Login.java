@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,20 +28,14 @@ public class Tela_Login extends AppCompatActivity {
         btLogin = findViewById(R.id.btEntrarLogin);
         btCadastro = findViewById(R.id.btCadastrarLogin);
 
-        btCadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cadastro = new Intent(Tela_Login.this, Tela_Cadastro.class);
-                startActivity(cadastro);
-            }
+        btCadastro.setOnClickListener(view -> {
+            Intent cadastro = new Intent(Tela_Login.this, Tela_Cadastro.class);
+            startActivity(cadastro);
         });
-        btLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent entrar = new Intent(Tela_Login.this, Tela_Mapas.class);
-                startActivity(entrar);
-                finish();
-            }
+        btLogin.setOnClickListener(view -> {
+            Intent entrar = new Intent(Tela_Login.this, Tela_Mapas.class);
+            startActivity(entrar);
+            finish();
         });
 
         txtEmailLogin = findViewById(R.id.txtEmail);

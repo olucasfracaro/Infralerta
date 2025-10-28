@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Denúncias enviadas "
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:gravity="center"
         >
     </TextView>
@@ -29,6 +29,7 @@
         <ImageButton
             android:layout_width="70dp"
             android:layout_height="80dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/mapa"
             android:id="@+id/btMapaDenunc">
 
@@ -37,10 +38,11 @@
         <ImageButton
         android:layout_width="70dp"
         android:layout_height="50dp"
-        android:src="@drawable/denuncia"
+            android:importantForAccessibility="no"
+            android:src="@drawable/denuncia"
         android:backgroundTint="@color/roxo"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="250dp">
+            android:layout_marginStart="250dp">
         </ImageButton>
     </LinearLayout>
 

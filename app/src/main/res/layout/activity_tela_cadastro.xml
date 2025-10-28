@@ -10,6 +10,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/logo">
 
     </ImageView>
@@ -20,16 +21,16 @@
         android:text="Cadastrar no Infralerta"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:textSize="30dp">
+        android:textSize="30sp">
     </TextView>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nome de Usuário"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </TextView>
 
 
@@ -40,7 +41,7 @@
         android:id="@+id/txtNomeCad"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </EditText>
 
 
@@ -48,9 +49,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Email"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </TextView>
 
 
@@ -61,16 +62,16 @@
         android:id="@+id/txtEmailCad"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </EditText>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Senha"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </TextView>
 
 
@@ -82,7 +83,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:inputType="textPassword"
-        android:textSize="25dp"
+        android:textSize="25sp"
         >
     </EditText>
 
@@ -91,9 +92,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CPF"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </TextView>
     
 
@@ -104,7 +105,7 @@
         android:id="@+id/txtcpf"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="25dp">
+        android:textSize="25sp">
     </EditText>
 
 
@@ -112,18 +113,18 @@
     <Button
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:text="Cadastrar-se"
-        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp"
         android:id="@+id/btCadastrarCad"
         android:layout_marginTop="30dp">
     </Button>
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
         android:text="Entrar"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:id="@+id/btEntrarCad">
     </Button>
 

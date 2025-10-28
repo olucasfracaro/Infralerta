@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -28,26 +27,17 @@ public class Tela_Mapas extends AppCompatActivity {
         btMais = findViewById(R.id.btMais);
         btMapaMapa = findViewById(R.id.btmapamapa);
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
-        btMais.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
-                startActivity(Problema);
-            }
+        btMais.setOnClickListener(view -> {
+            Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
+            startActivity(Problema);
         });
-        btMapaMapa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btMapaMapa.setOnClickListener(v -> {
 
-            }
         });
 
-        btMapaDenuncia.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent Denuncia = new Intent(Tela_Mapas.this, Tela_Denuncias.class);
-                startActivity(Denuncia);
-            }
+        btMapaDenuncia.setOnClickListener((v -> {
+            Intent Denuncia = new Intent(Tela_Mapas.this, Tela_Denuncias.class);
+            startActivity(Denuncia);
         }));
     }
 }

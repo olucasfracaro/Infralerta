@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -28,11 +27,8 @@ public class Tela_Detalhes extends AppCompatActivity {
         btVoltarDetalhe = findViewById(R.id.btvoltarsituacao);
         btEnviar = findViewById(R.id.btEnvio);
 
-        btVoltarDetalhe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent Mapa = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
-            }
+        btVoltarDetalhe.setOnClickListener(v -> {
+            Intent Mapa = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
         });
 
     }

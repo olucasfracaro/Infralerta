@@ -1,12 +1,11 @@
 package com.example.infralerta;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class BancoControllerUsuarios {
     private SQLiteDatabase db;
-    private CriaBanco banco;
+    private final CriaBanco banco;
 
     public BancoControllerUsuarios(Context context) {
         banco = new CriaBanco(context);

@@ -23,13 +23,10 @@ public class splashInfra extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(splashInfra.this, MainActivity.class);
-                startActivity(intent);
+        handler.postDelayed(() -> {
+            Intent intent = new Intent(splashInfra.this, MainActivity.class);
+            startActivity(intent);
 finish();
-            }
         },2000);
     }
 }

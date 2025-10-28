@@ -11,8 +11,8 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="+"
-        android:textSize="40dp"
-        android:layout_marginLeft="300dp"
+        android:textSize="40sp"
+        android:layout_marginStart="300dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
         android:id="@+id/btMais">
@@ -36,7 +36,7 @@
         <ImageButton
             android:layout_width="70dp"
             android:layout_height="80dp"
-            android:src="@drawable/mapa"
+            android:importantForAccessibility="no" android:src="@drawable/mapa"
             android:id="@+id/btmapamapa"
             android:backgroundTint="@color/roxo">
 
@@ -45,10 +45,10 @@
         <ImageButton
             android:layout_width="70dp"
             android:layout_height="50dp"
-            android:src="@drawable/denuncia"
+            android:importantForAccessibility="no" android:src="@drawable/denuncia"
             android:id="@+id/btdenunciasmapa"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="250dp">
+            android:layout_marginStart="250dp">
         </ImageButton>
     </LinearLayout>
 

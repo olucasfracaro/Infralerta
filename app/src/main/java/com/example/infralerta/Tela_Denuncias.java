@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -26,12 +25,9 @@ ImageButton btMapaDenunc;
         });
         btMapaDenunc = findViewById(R.id.btMapaDenunc);
 
-        btMapaDenunc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent Mapa = new Intent(Tela_Denuncias.this, Tela_Mapas.class);
-                startActivity(Mapa);
-            }
+        btMapaDenunc.setOnClickListener(v -> {
+            Intent Mapa = new Intent(Tela_Denuncias.this, Tela_Mapas.class);
+            startActivity(Mapa);
         });
     }
 }

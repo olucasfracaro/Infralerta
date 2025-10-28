@@ -37,13 +37,9 @@ public class Tela_Cadastro extends AppCompatActivity implements View.OnClickList
         txtCADCPF = findViewById(R.id.txtcpf);
         txtCADNome = findViewById(R.id.txtNomeCad);
 
-        btCADentrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent Entrar = new Intent(Tela_Cadastro.this , Tela_Login.class);
-                startActivity(Entrar);
-            }
-
+        btCADentrar.setOnClickListener(v -> {
+            Intent Entrar = new Intent(Tela_Cadastro.this , Tela_Login.class);
+            startActivity(Entrar);
         });
 
         btCADcadastro.setOnClickListener(this);
@@ -51,18 +47,18 @@ public class Tela_Cadastro extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if (v.getId() == R.id.btCadastrarCad);{
+        if (view.getId() == R.id.btCadastrarCad) {
             salvar();
         }
     }
 
     public void salvar(){
-        String msg = "";
+        String msg;
         String txtNome = txtCADNome.getText().toString();
         String txtEmail = txtCADEmail.getText().toString();
         String txtSenha = txtCADSenha.getText().toString();
         String txtCPF = txtCADCPF.getText().toString();
-        if (txtNome.length()==0 || txtEmail.length()<10)
+        if (txtNome.isEmpty() || txtEmail.length()<10)
         {
             msg = "Atenção - Os campos Nome e E-mail devem ser preenchidos!!!";
             Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();

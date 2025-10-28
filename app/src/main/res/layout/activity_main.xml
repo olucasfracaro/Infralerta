@@ -11,15 +11,16 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="140dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/logo"
-        android:layout_marginLeft="30dp">
+        android:layout_gravity="center_horizontal">
 
     </ImageView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Bem-Vindo ao Infralerta!"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textAlignment="center"
         android:textColor="@color/blue"
         />
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="O Infralerta tem o objetivo de auxiliar na detecção de problemas de infraestrutura na cidade de Guarulhos através da coleta de denúncias de cidadãos. \n Vamos ajudar a construir uma cidade melhor?"
         android:textAlignment="center"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:layout_marginTop="100dp">
     </TextView>
     
@@ -50,10 +51,10 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="240dp"
+        android:layout_marginStart="240dp"
         android:layout_marginTop="120dp"
         android:text="Próximo"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:id="@+id/btproximo">
 
     </Button>
