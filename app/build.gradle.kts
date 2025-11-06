@@ -37,6 +37,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
+    implementation("com.github.MKergall:osmbonuspack:6.9.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
