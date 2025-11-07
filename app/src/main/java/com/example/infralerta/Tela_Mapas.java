@@ -1,5 +1,6 @@
 package com.example.infralerta;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +31,8 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,9 +42,12 @@ public class Tela_Mapas extends AppCompatActivity {
     Button btMais;
     FloatingActionButton btMapaMapa, btMapaDenuncia;
     MapView map;
+    IMapController controlador;
     EditText txtPesquisa;
+    MyLocationNewOverlay mLocationOverlay;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
+    // obtendo o nome do pacote; é necessário para identificar o client para acessar o mapa;
     static final String userAgent = BuildConfig.LIBRARY_PACKAGE_NAME+"/"+BuildConfig.VERSION_NAME;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,7 @@ public class Tela_Mapas extends AppCompatActivity {
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         txtPesquisa = findViewById(R.id.txtPesquisa);
+        // obtendo o endereço e pesquisando quando o botão de pesquisa (ou enter) é clicado
         txtPesquisa.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -68,16 +75,24 @@ public class Tela_Mapas extends AppCompatActivity {
                 return false;
             }
         });
-
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
-
-        IMapController controlador = map.getController();
+        controlador = map.getController();
         controlador.setZoom(20.0);
 
-        GeoPoint pontoInicio = new GeoPoint(-23.4667301, -46.5403522,15);
-        controlador.setCenter(pontoInicio);
+        mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
+
+        // checando se as permissões de localização foram fornecidas, se não, pedimos ela
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            pedirPermissoesSeNecessario(permissoes);
+        } else {
+            obterLocalizacao();
+        }
+
+
 
         btMais = findViewById(R.id.btMais);
         btMapaMapa = findViewById(R.id.btmapamapa);
@@ -112,15 +127,16 @@ public class Tela_Mapas extends AppCompatActivity {
                             public void run() {
                                 IMapController controlador = map.getController();
                                 GeoPoint locEndereco = new GeoPoint(address.getLatitude(),address.getLongitude());
-                                controlador.setCenter(locEndereco);
+                                controlador = map.getController();
+                                controlador.animateTo(locEndereco);
                                 controlador.setZoom(20.0);
 
-                                Marker marcadorInicio = new Marker(map);
-                                marcadorInicio.setTitle("Você pesquisou este local!");
-                                marcadorInicio.setSubDescription("Clique para dispensar essa mensagem");
-                                marcadorInicio.setPosition(locEndereco);
-                                marcadorInicio.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                                map.getOverlays().add(marcadorInicio);
+                                Marker marcadorPesquisa = new Marker(map);
+                                marcadorPesquisa.setTitle("Você pesquisou este local!");
+                                marcadorPesquisa.setSubDescription("Clique para dispensar essa mensagem");
+                                marcadorPesquisa.setPosition(locEndereco);
+                                marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                                map.getOverlays().add(marcadorPesquisa);
                             }
                         });
                     }
@@ -144,33 +160,65 @@ public class Tela_Mapas extends AppCompatActivity {
         map.onPause();
     }
 
+    private void obterLocalizacao() {
+        // aqui obtemos a localização do usuário e em seguida paramos de detectar a localização
+        // em caso de erro ao puxar a localização, define-se o centro para o Centro de Guarulhos
+        mLocationOverlay.enableMyLocation();
+        mLocationOverlay.runOnFirstFix(new Runnable() {
+            @Override
+            public void run() {
+                GeoPoint locUsuario = mLocationOverlay.getMyLocation();
+
+                map.post(() -> {
+                    if (locUsuario != null) {
+                        controlador.setZoom(20.0);
+                        controlador.setCenter(locUsuario);
+                        Marker marcadorUsuario = new Marker(map);
+                        marcadorUsuario.setTitle("Você está aqui!");
+                        marcadorUsuario.setSubDescription("Clique para dispensar essa mensagem");
+                        marcadorUsuario.setPosition(locUsuario);
+                        marcadorUsuario.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                        map.getOverlays().add(marcadorUsuario);
+                    } else {
+                        GeoPoint pontoInicio = new GeoPoint(-23.4667301, -46.5403522,15);
+                        controlador.setZoom(15.0);
+                        controlador.setCenter(pontoInicio);
+                    }
+                });
+
+                mLocationOverlay.disableMyLocation();
+            }
+        });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++) {
-            permissionsToRequest.add(permissions[i]);
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+
+        switch (requestCode) {
+            case 1:
+                // se a permissão é cancelada, os arrays de resultado estarão vazios
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    obterLocalizacao();
+                } else {
+                    GeoPoint pontoInicio = new GeoPoint(-23.4667301, -46.5403522,15);
+                    controlador.setCenter(pontoInicio);
+                }
         }
     }
 
-    private void requestPermissionsIfNecessary(String[] permissions) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission)
+    private void pedirPermissoesSeNecessario(String[] permissoes) {
+        ArrayList<String> permissoesParaPedir = new ArrayList<>();
+        for (String permissao : permissoes) {
+            if (ContextCompat.checkSelfPermission(this, permissao)
                     != PackageManager.PERMISSION_GRANTED) {
-                permissionsToRequest.add(permission);
+                permissoesParaPedir.add(permissao);
             }
         }
-        if (!permissionsToRequest.isEmpty()) {
+        if (!permissoesParaPedir.isEmpty()) {
             ActivityCompat.requestPermissions(
                     this,
-                    permissionsToRequest.toArray(new String[0]),
+                    permissoesParaPedir.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
