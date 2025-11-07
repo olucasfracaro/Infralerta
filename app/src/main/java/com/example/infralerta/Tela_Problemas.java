@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -13,8 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class Tela_Problemas extends AppCompatActivity {
-    Button btproximoinfra;
+    FloatingActionButton btproximoinfra;
     TextView txtLocal;
     RadioGroup radiogProblemas;
     RadioButton btasfalto, btvazamento, btfaltaposte, btfaltageral, btcalcada, btarvoreanormal, btausenciaasfalto, btproblemasemaforo, btindicacao;

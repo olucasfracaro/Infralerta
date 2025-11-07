@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,25 +10,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
         <EditText
             android:id="@+id/txtPesquisa"
             android:layout_width="300dp"
             android:layout_height="wrap_content" />
-        <Button
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="+"
-            android:textSize="40sp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="40dp"
+            android:src="@drawable/round_add_48"
+            android:backgroundTint="@color/roxo"
             android:id="@+id/btMais">
-        </Button>
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="550dp"
         android:orientation="vertical">
         <org.osmdroid.views.MapView
             android:id="@+id/map"
@@ -38,25 +43,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@color/cinza">
+        android:background="@color/cinza"
+        android:gravity="center">
 
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="80dp"
-            android:importantForAccessibility="no" android:src="@drawable/mapa"
-            android:id="@+id/btmapamapa"
-            android:backgroundTint="@color/roxo">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:fabCustomSize="72dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/baseline_location_on_48"
+            android:backgroundTint="@color/roxo"
+            android:id="@+id/btmapamapa" />
 
-        </ImageButton>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="50dp"
-            android:importantForAccessibility="no" android:src="@drawable/denuncia"
-            android:id="@+id/btdenunciasmapa"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="250dp">
-        </ImageButton>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:fabCustomSize="72dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/baseline_email_48"
+            android:backgroundTint="@color/roxo"
+            android:id="@+id/btdenunciasmapa" />
+
     </LinearLayout>
 
 

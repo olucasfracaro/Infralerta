@@ -22,7 +22,7 @@
         android:text="Bem-Vindo ao Infralerta!"
         android:textSize="25sp"
         android:textAlignment="center"
-        android:textColor="@color/blue"
+        android:textColor="@color/azul"
         />
 
     <TextView

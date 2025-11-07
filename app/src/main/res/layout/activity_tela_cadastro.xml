@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:gravity="center_horizontal">
 
     <ImageView
         android:layout_width="match_parent"
@@ -28,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nome de Usuário"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:textSize="25sp">
     </TextView>
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Email"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:textSize="25sp">
     </TextView>
@@ -69,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Senha"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:textSize="25sp">
     </TextView>
@@ -92,7 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CPF"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:textSize="25sp">
     </TextView>
@@ -115,14 +116,12 @@
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:text="Cadastrar-se"
-        android:layout_marginStart="75dp"
         android:id="@+id/btCadastrarCad"
         android:layout_marginTop="30dp">
     </Button>
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
         android:text="Entrar"
         android:textSize="30sp"
         android:id="@+id/btEntrarCad">

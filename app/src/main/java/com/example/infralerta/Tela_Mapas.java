@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -21,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.BuildConfig;
@@ -37,7 +37,7 @@ import java.util.List;
 
 public class Tela_Mapas extends AppCompatActivity {
     Button btMais;
-    ImageButton btMapaMapa, btMapaDenuncia;
+    FloatingActionButton btMapaMapa, btMapaDenuncia;
     MapView map;
     EditText txtPesquisa;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;

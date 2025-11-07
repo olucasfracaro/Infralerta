@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,11 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Denúncias enviadas "
         android:textSize="30sp"
-        android:gravity="center"
-        >
-    </TextView>
-
-
+        android:gravity="center" />
 
 
     <LinearLayout
@@ -24,26 +21,33 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_marginTop="590dp"
-        android:background="@color/cinza">
+        android:background="@color/cinza"
+        android:gravity="center">
 
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="80dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:fabCustomSize="72dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/mapa"
-            android:id="@+id/btMapaDenunc">
+            android:src="@drawable/baseline_location_on_48"
+            android:backgroundTint="@color/roxo"
+            android:id="@+id/btMapaDenunc" />
 
-        </ImageButton>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="50dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:fabCustomSize="72dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/denuncia"
-        android:backgroundTint="@color/roxo"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="250dp">
-        </ImageButton>
+            android:src="@drawable/baseline_email_48"
+            android:backgroundTint="@color/roxo" />
+
     </LinearLayout>
 
 </LinearLayout>

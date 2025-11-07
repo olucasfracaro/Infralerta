@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:gravity="center_horizontal">
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Detalhes da situação"
     android:textAlignment="center"
-    android:textSize="30dp">
+    android:textSize="30sp">
     
 </TextView>
     <TextView
@@ -19,14 +21,13 @@
         android:layout_height="wrap_content"
         android:text="Local Selecionado: "
         android:textAlignment="center"
-        android:textSize="20dp">
+        android:textSize="20sp">
     </TextView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Detalhes da situação: "
-        android:textSize="25dp"
-        android:layout_marginStart="10dp"
+        android:textSize="25sp"
         android:layout_marginTop="20dp">
     </TextView>
     <EditText
@@ -39,32 +40,37 @@
         android:gravity="top|start"
         android:maxLines="10"
         android:scrollbars="vertical"
-        android:layout_marginStart="10dp"
         android:background="@drawable/edit_text_border"
         >
 
     </EditText>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <Button
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Voltar"
+        android:orientation="horizontal">
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:fabCustomSize="80dp"
+        android:src="@drawable/round_arrow_back_24"
         android:layout_marginTop="400dp"
-        android:textSize="20dp"
+        android:backgroundTint="@color/purpura"
         android:id="@+id/btvoltarsituacao">
-    </Button>
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Enviar"
-        android:textSize="20dp"
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:fabCustomSize="80dp"
+        android:src="@drawable/round_arrow_forward_24"
+        android:backgroundTint="@color/purpura"
         android:id="@+id/btEnvio"
-        android:layout_marginTop="400dp"
-        android:layout_marginStart="95dp">
-    </Button>
+        android:layout_marginTop="400dp">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>
 
 </LinearLayout>
