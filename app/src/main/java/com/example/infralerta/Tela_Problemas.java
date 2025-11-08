@@ -2,6 +2,7 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -14,11 +15,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 public class Tela_Problemas extends AppCompatActivity {
     FloatingActionButton btproximoinfra;
     TextView txtLocal;
-    RadioGroup radiogProblemas;
-    RadioButton btasfalto, btvazamento, btfaltaposte, btfaltageral, btcalcada, btarvoreanormal, btausenciaasfalto, btproblemasemaforo, btindicacao;
+    CheckBox btasfalto, btvazamento, btfaltaposte, btfaltageral, btcalcada, btarvoreanormal, btausenciaasfalto, btproblemasemaforo, btindicacao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +45,32 @@ public class Tela_Problemas extends AppCompatActivity {
 
 
         btproximoinfra.setOnClickListener(view -> {
+            ArrayList<String> problemasSelecionados = new ArrayList<>();
+            if (btasfalto.isChecked()) problemasSelecionados.add("* Asfalto Danificado");
+            if (btvazamento.isChecked()) problemasSelecionados.add("* Vazamento de Esgoto");
+            if (btfaltaposte.isChecked()) problemasSelecionados.add("* Falta de Energia (Poste)");
+            if (btfaltageral.isChecked()) problemasSelecionados.add("* Falta de Energia (Geral)");
+            if (btcalcada.isChecked()) problemasSelecionados.add("* Calçada Danificada");
+            if (btarvoreanormal.isChecked()) problemasSelecionados.add("* Árvore de Tamanho Anormal");
+            if (btausenciaasfalto.isChecked()) problemasSelecionados.add("* Ausência de Asfalto");
+            if (btproblemasemaforo.isChecked()) problemasSelecionados.add("* Problema de Semáforo");
+            if (btindicacao.isChecked()) problemasSelecionados.add("* Falta de Indicação na Rua");
+
+
             Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);
+            detalhes.putStringArrayListExtra("problemasSelecionados", problemasSelecionados);
+            detalhes.putExtra("a", txtLocal.getText().toString());
             startActivity(detalhes);
         });
+
+        txtLocal = findViewById(R.id.txtLocal);
+
+        Intent intent = getIntent();
+        String localRecebido = intent.getStringExtra("a");
+
+        if (localRecebido != null) {
+            txtLocal.setText(localRecebido);
+        }
 
     }
 }

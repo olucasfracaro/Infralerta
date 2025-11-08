@@ -24,78 +24,78 @@
         android:id="@+id/txtLocal">
     </TextView>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Asfalto Danificado"
         android:id="@+id/btasfalto"
         android:layout_marginTop="60dp">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Vazamento de Esgoto"
         android:id="@+id/btvazamento">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Falta de Energia (Postes)"
         android:id="@+id/btfaltaposte">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Falta de Energia (Geral)"
         android:id="@+id/btfaltageral">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Calçada Danificada"
         android:id="@+id/btcalcada">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Árvore de Tamanho Anormal"
         android:id="@+id/btarvoreanormal">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Ausência de Asfalto"
         android:id="@+id/btausenciaasfalto">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Problema Semáforo"
         android:id="@+id/btproblemasemaforo">
-    </RadioButton>
+    </CheckBox>
 
-    <RadioButton
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Falta de Indicação na Rua"
         android:id="@+id/btindicacao">
-    </RadioButton>
+    </CheckBox>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
