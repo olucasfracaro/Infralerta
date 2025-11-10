@@ -39,8 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tela_Mapas extends AppCompatActivity {
-    Button btMais;
-    FloatingActionButton btMapaMapa, btMapaDenuncia;
+    FloatingActionButton btMais, btMapaMapa, btMapaDenuncia;
     MapView map;
     IMapController controlador;
     EditText txtPesquisa;
