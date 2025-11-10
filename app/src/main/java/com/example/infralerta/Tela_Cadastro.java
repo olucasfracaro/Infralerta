@@ -1,6 +1,7 @@
 package com.example.infralerta;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Tela_Cadastro extends AppCompatActivity implements View.OnClickListener {
+public class Tela_Cadastro extends AppCompatActivity {
     Button btCADcadastro, btCADentrar;
     EditText txtCADEmail, txtCADSenha, txtCADCPF, txtCADNome;
 
@@ -37,47 +38,50 @@ public class Tela_Cadastro extends AppCompatActivity implements View.OnClickList
         txtCADCPF = findViewById(R.id.txtcpf);
         txtCADNome = findViewById(R.id.txtNomeCad);
 
-        btCADentrar.setOnClickListener(v -> {
-            Intent Entrar = new Intent(Tela_Cadastro.this , Tela_Login.class);
-            startActivity(Entrar);
-        });
+        //tirei o Intent para otimizar o código
+        btCADentrar.setOnClickListener(v -> finish());
 
-        btCADcadastro.setOnClickListener(this);
+        btCADcadastro.setOnClickListener(v -> cadastrar());
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.btCadastrarCad) {
-            salvar();
-        }
-    }
-
-    public void salvar(){
-        String msg;
+    public void cadastrar() {
         String txtNome = txtCADNome.getText().toString();
         String txtEmail = txtCADEmail.getText().toString();
         String txtSenha = txtCADSenha.getText().toString();
         String txtCPF = txtCADCPF.getText().toString();
-        if (txtNome.isEmpty() || txtEmail.length()<10)
-        {
-            msg = "Atenção - Os campos Nome e E-mail devem ser preenchidos!!!";
-            Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
-        }else {
+
+        if (txtNome.isEmpty() || txtEmail.isEmpty() || txtSenha.isEmpty() || txtCPF.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_LONG).show();
+        } else if (!txtEmail.contains("@")) {
+            Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_LONG).show();
+        } else if (txtCPF.length() < 14) {
+            Toast.makeText(this, "Insira um CPF válido!", Toast.LENGTH_LONG).show();
+        } else {
             BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
-            String resultado;
 
-            resultado = bd.insereDados(txtNome, txtEmail, txtSenha, txtCPF);
+            if (bd.insereDados(txtNome, txtEmail, txtSenha, txtCPF)) {
+                Toast.makeText(this, "Usuário cadastrado.", Toast.LENGTH_LONG).show();
 
-            Toast.makeText(getApplicationContext(), resultado, Toast.LENGTH_LONG).show();
-            limpar();
+                //salva o usuário para o próximo login
+                SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+
+                int userId = bd.buscarUserId(txtEmail);
+                editor.putInt("user_id", userId);
+
+                editor.apply();
+                Intent it = new Intent(Tela_Cadastro.this, Tela_Mapas.class);
+                startActivity(it);
+            } else {
+                Toast.makeText(this, "Erro ao cadastrar usuário.", Toast.LENGTH_LONG).show();
+            }
+            limparCampos();
         }
-
     }
-    public void limpar(){
-        txtCADCPF.setText("") ;
-        txtCADNome.setText("") ;
-        txtCADEmail.setText("") ;
+    public void limparCampos(){
+        txtCADCPF.setText("");
+        txtCADNome.setText("");
+        txtCADEmail.setText("");
         txtCADSenha.setText("");
     }
-
 }

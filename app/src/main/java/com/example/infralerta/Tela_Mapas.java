@@ -3,6 +3,7 @@ package com.example.infralerta;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tela_Mapas extends AppCompatActivity {
-    FloatingActionButton btMais, btMapaMapa, btMapaDenuncia;
+    FloatingActionButton btLogout, btMais, btMapaMapa, btMapaDenuncia;
     MapView map;
     IMapController controlador;
     EditText txtPesquisa;
@@ -92,14 +93,20 @@ public class Tela_Mapas extends AppCompatActivity {
         }
 
 
-
+        btLogout = findViewById(R.id.btLogout);
         btMais = findViewById(R.id.btMais);
         btMapaMapa = findViewById(R.id.btmapamapa);
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
+
+        btLogout.setOnClickListener(v -> {
+            logout();
+        });
+
         btMais.setOnClickListener(view -> {
             Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
             startActivity(Problema);
         });
+
         btMapaMapa.setOnClickListener(v -> {
 
         });
@@ -108,6 +115,15 @@ public class Tela_Mapas extends AppCompatActivity {
             Intent Denuncia = new Intent(Tela_Mapas.this, Tela_Denuncias.class);
             startActivity(Denuncia);
         }));
+    }
+
+    private void logout() {
+        SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.clear();
+        editor.apply();
+        finish();
     }
 
     public void pesquisarEndereco() {

@@ -71,7 +71,9 @@ public class Tela_Login extends AppCompatActivity {
                     editor.putInt("user_id", user_id);
                     editor.apply();
 
-                    //mudando de tela
+                    //apagando campos e mudando de tela
+                    txtEmailLogin.setText("");
+                    txtSenhaLogin.setText("");
                     Intent it = new Intent(Tela_Login.this, Tela_Mapas.class);
                     startActivity(it);
                 } else {

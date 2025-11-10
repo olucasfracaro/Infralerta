@@ -14,24 +14,24 @@ public class BancoControllerUsuarios {
         banco = new CriaBanco(context);
 
     }
-    public String insereDados(String txtNome, String txtEmail, String txtSenha, String txtCPF) {
+    public boolean insereDados(String _nome, String _email, String _senha, String _cpf) {
         ContentValues valores;
         long resultado;
         db = banco.getWritableDatabase();
 
         valores = new ContentValues();
-        valores.put("nome", txtNome);
-        valores.put("email", txtEmail);
-        valores.put("senha", txtSenha);
-        valores.put("CPF", txtCPF);
+        valores.put("nome", _nome);
+        valores.put("email", _email);
+        valores.put("senha", _senha);
+        valores.put("cpf", _cpf);
 
-        resultado = db.insert("contatos", null, valores);
+        resultado = db.insert("usuarios", null, valores);
         db.close();
 
         if (resultado == -1)
-            return "Erro ao inserir registro";
+            return false;
         else
-            return "Registro Inserido com sucesso";
+            return true;
     }
 
     public String alteraDados(int id, String nome, String email){
@@ -57,15 +57,15 @@ public class BancoControllerUsuarios {
         return msg;
     }
 
-    public String excluirDados(int id){
+    public String excluirDados(String _tabela, int _id){
         String msg = "Registro Excluído com sucesso!" ;
 
         db = banco.getReadableDatabase();
 
-        String condicao = "user_id = " + id ;
+        String condicao = "user_id = " + _id ;
 
         int linhas ;
-        linhas = db.delete("contatos", condicao, null) ;
+        linhas = db.delete(_tabela, condicao, null) ;
 
         if ( linhas < 1) {
             msg = "Erro ao Excluir" ;
