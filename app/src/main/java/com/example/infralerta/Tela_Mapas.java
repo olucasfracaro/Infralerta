@@ -44,6 +44,8 @@ public class Tela_Mapas extends AppCompatActivity {
     MapView map;
     IMapController controlador;
     EditText txtPesquisa;
+    String localselecionado;
+
     MyLocationNewOverlay mLocationOverlay;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
@@ -99,6 +101,8 @@ public class Tela_Mapas extends AppCompatActivity {
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
         btMais.setOnClickListener(view -> {
             Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
+            localselecionado = txtPesquisa.getText().toString();
+            Problema.putExtra("a", localselecionado);
             startActivity(Problema);
         });
         btMapaMapa.setOnClickListener(v -> {
