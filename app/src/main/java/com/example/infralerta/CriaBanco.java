@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class CriaBanco extends SQLiteOpenHelper {
 
     private static final String NOME_BANCO = "banco_infra.db";
-    private static final int VERSAO = 1;
+    private static final int VERSAO = 2;
     public CriaBanco(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
     }
@@ -30,6 +30,9 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + "descricao text,"
                 + "FOREIGN KEY(user_id) REFERENCES usuarios(user_id))";
         db.execSQL(sql);
+
+        db.execSQL("INSERT INTO usuarios (nome, email, senha, cpf) " +
+                    "VALUES ('Administrador','admin@infralerta.com','admin','000.000.000-00')");
     }
 
     @Override
