@@ -24,7 +24,9 @@
         <EditText
             android:id="@+id/txtPesquisa"
             android:layout_width="220dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionSearch"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="80dp"
