@@ -37,9 +37,9 @@
         android:textSize="15sp"
         android:inputType="textMultiLine"
         android:lines="8"
-        android:minLines="6"
+        android:minLines="9"
         android:gravity="top|start"
-        android:maxLines="10"
+        android:maxLines="9"
         android:scrollbars="vertical"
         android:background="@drawable/edit_text_border"
         >
