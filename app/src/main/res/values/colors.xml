@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="azul">#0000FF</color>
+    <color name="azulclaro">#8AD5FA</color>
     <color name="cinza">#E0E0E0</color>
     <color name="roxo">#D26EFF</color>
     <color name="purpura">#6750a4</color>
+    <color name="branco">#FAFAFA</color>
 </resources>

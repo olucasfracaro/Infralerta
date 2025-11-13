@@ -8,67 +8,121 @@
     android:orientation="vertical"
     android:layout_margin="10dp"
     android:gravity="center_horizontal">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Detalhes da situação"
-    android:textAlignment="center"
-    android:textSize="30sp">
-
-</TextView>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="Local Selecionado: "
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:id="@+id/txtlocalselecionado">
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="Detalhes da situação"
+        android:textSize="25sp">
     </TextView>
-    <TextView
-        android:layout_width="match_parent"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="Detalhes da situação: "
-        android:textSize="25sp"
-        android:layout_marginTop="20dp">
-    </TextView>
-    <EditText
-        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_location_on_48"
+                app:tint="@color/purpura" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Local selecionado: " />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"
+                    android:text=""
+                    android:id="@+id/txtlocalselecionado" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="350dp"
+        android:layout_height="260dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="20dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_check_circle_24"
+                app:tint="@color/purpura"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="13dp"
+                android:id="@+id/layoutproblemas">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Problemas selecionados:"
+                    android:textStyle="bold"
+                    android:textSize="18dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:inputType="textMultiLine"
-        android:lines="8"
-        android:minLines="9"
-        android:gravity="top|start"
-        android:maxLines="9"
-        android:scrollbars="vertical"
-        android:background="@drawable/edit_text_border"
-        >
-
-    </EditText>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/layoutproblemas">
-
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:hint="Detalhamento">
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Problemas Selecionados"
-            android:textSize="20dp"
-            android:layout_marginTop="10dp"/>
-    </LinearLayout>
+            android:textSize="15sp"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:minLines="5"
+            android:gravity="top|start"
+            android:maxLines="5"
+            android:scrollbars="vertical">
+
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
 <LinearLayout
     android:layout_height="wrap_content"
-    android:layout_width="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_marginTop="25dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_gravity="center|end">
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:fabCustomSize="80dp"
+        android:layout_height="wrap_content"
         android:src="@drawable/round_arrow_back_24"
-        android:layout_marginTop="300dp"
+        app:tint="@color/branco"
         android:backgroundTint="@color/purpura"
         android:id="@+id/btvoltarsituacao">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
@@ -79,12 +133,11 @@
             android:layout_weight="1" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:fabCustomSize="80dp"
-        android:src="@drawable/round_arrow_forward_24"
+        android:layout_height="wrap_content"
+        android:src="@drawable/send_24"
+        app:tint="@color/branco"
         android:backgroundTint="@color/purpura"
-        android:id="@+id/btEnvio"
-        android:layout_marginTop="300dp">
+        android:id="@+id/btEnvio">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </LinearLayout>
 

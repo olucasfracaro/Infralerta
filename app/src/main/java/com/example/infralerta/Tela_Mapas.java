@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -105,10 +106,15 @@ public class Tela_Mapas extends AppCompatActivity {
         });
 
         btMais.setOnClickListener(view -> {
-            Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
-            localselecionado = txtPesquisa.getText().toString();
-            Problema.putExtra("a", localselecionado);
-            startActivity(Problema);
+            if (txtPesquisa.length()!=0) {
+                Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
+                localselecionado = txtPesquisa.getText().toString();
+                Problema.putExtra("a", localselecionado);
+                startActivity(Problema);
+            } else {
+                Toast.makeText(this, "Pesquise uma localização antes de criar uma denúncia", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
         btMapaMapa.setOnClickListener(v -> {

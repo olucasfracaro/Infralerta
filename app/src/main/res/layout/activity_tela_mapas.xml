@@ -15,25 +15,32 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
             android:src="@drawable/round_logout_48"
-            android:backgroundTint="@color/roxo"
+            app:tint="@color/branco"
+            app:backgroundTint="@color/purpura"
             android:id="@+id/btLogout">
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-        <EditText
-            android:id="@+id/txtPesquisa"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionSearch"/>
+            android:layout_marginHorizontal="15dp"
+            android:hint="Pesquise um local">
+            <EditText
+                android:id="@+id/txtPesquisa"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:imeOptions="actionSearch"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:src="@drawable/round_add_48"
-            android:backgroundTint="@color/roxo"
+            app:tint="@color/branco"
+            app:backgroundTint="@color/purpura"
             android:id="@+id/btMais">
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>
@@ -50,17 +57,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@color/cinza"
         android:gravity="center">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            app:fabCustomSize="72dp"
+            app:fabCustomSize="65dp"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_location_on_48"
-            android:backgroundTint="@color/roxo"
+            app:tint="@color/branco"
+            app:backgroundTint="@color/purpura"
             android:id="@+id/btmapamapa" />
 
         <View
@@ -72,10 +79,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            app:fabCustomSize="72dp"
+            app:fabCustomSize="65dp"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_email_48"
-            android:backgroundTint="@color/roxo"
+            app:tint="@color/material_dynamic_neutral50"
+            app:backgroundTint="@color/cinza"
             android:id="@+id/btdenunciasmapa" />
 
     </LinearLayout>

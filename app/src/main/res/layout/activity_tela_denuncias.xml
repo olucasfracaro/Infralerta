@@ -11,27 +11,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Denúncias enviadas "
+        android:text="Denúncias enviadas"
         android:textSize="30sp"
         android:gravity="center" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_marginTop="590dp"
-        android:background="@color/cinza"
         android:gravity="center">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            app:fabCustomSize="72dp"
+            app:fabCustomSize="65dp"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_location_on_48"
-            android:backgroundTint="@color/roxo"
+            app:tint="@color/material_dynamic_neutral50"
+            app:backgroundTint="@color/cinza"
             android:id="@+id/btMapaDenunc" />
 
         <View
@@ -43,10 +42,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            app:fabCustomSize="72dp"
+            app:fabCustomSize="65dp"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_email_48"
-            android:backgroundTint="@color/roxo" />
+            app:tint="@color/branco"
+            app:backgroundTint="@color/purpura" />
 
     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,7 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Tela_Cadastro extends AppCompatActivity {
-    Button btCADcadastro, btCADentrar;
+    Button btCADcadastro;
+    LinearLayout btCADentrar;
     EditText txtCADEmail, txtCADSenha, txtCADCPF, txtCADNome;
 
 

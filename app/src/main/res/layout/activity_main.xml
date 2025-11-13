@@ -11,7 +11,8 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="140dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="20dp"
         android:importantForAccessibility="no"
         android:src="@drawable/logo"
         android:layout_gravity="center_horizontal">
@@ -20,19 +21,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bem-Vindo ao Infralerta!"
-        android:textSize="25sp"
+        android:text="Bem-vindo ao Infralerta!"
+        android:textStyle="bold"
+        android:textSize="30sp"
         android:textAlignment="center"
-        android:textColor="@color/azul"
         />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="O Infralerta tem o objetivo de auxiliar na detecção de problemas de infraestrutura na cidade de Guarulhos através da coleta de denúncias de cidadãos. \n Vamos ajudar a construir uma cidade melhor?"
-        android:textAlignment="center"
+        android:layout_marginHorizontal="20dp"
+        android:text="O Infralerta tem o objetivo de auxiliar na detecção de problemas de infraestrutura na cidade de Guarulhos através da coleta de denúncias de cidadãos. \nVamos ajudar a construir uma cidade melhor?"
         android:textSize="25sp"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="50dp">
     </TextView>
     
 
@@ -52,6 +53,7 @@
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_marginHorizontal="10dp"
         android:orientation="horizontal"
         android:layout_gravity="end">
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -59,9 +61,11 @@
             android:layout_height="80dp"
             app:fabCustomSize="80dp"
             android:src="@drawable/round_arrow_forward_24"
+            app:tint="@color/branco"
+            app:maxImageSize="30dp"
             android:backgroundTint="@color/purpura"
             android:id="@+id/btproximo"
-            android:layout_marginTop="100dp">
+            android:layout_marginTop="80dp">
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>
 

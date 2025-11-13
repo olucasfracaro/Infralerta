@@ -22,110 +22,106 @@
         android:text="Cadastrar no Infralerta"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:textSize="30sp">
+        android:textSize="30sp"
+        android:layout_marginTop="10dp">
     </TextView>
 
-    <TextView
+    <!-- <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nome de Usuário"
+        android:text="Nome de usuário"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        android:textSize="25sp">
-    </TextView>
+        android:textSize="20sp">
+    </TextView> -->
 
-
-    <EditText
-        android:background="@drawable/edit_text_border"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtNomeCad"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="25sp">
-    </EditText>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:layout_marginStart="15dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25sp">
-    </TextView>
+        android:hint="Nome de usuário">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtNomeCad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <EditText
-        android:background="@drawable/edit_text_border"
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtEmailCad"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="25sp">
-    </EditText>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Senha"
-        android:layout_marginStart="15dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25sp">
-    </TextView>
+        android:hint="E-mail">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtEmailCad" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <EditText
-        android:background="@drawable/edit_text_border"
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtSenhaCad"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:inputType="textPassword"
-        android:textSize="25sp"
-        >
-    </EditText>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CPF"
-        android:layout_marginStart="15dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
-        android:textSize="25sp">
-    </TextView>
+        android:hint="Senha">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtSenhaCad"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     
-
-    <EditText
-        android:background="@drawable/edit_text_border"
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtcpf"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="25sp">
-    </EditText>
-
-
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="CPF">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtcpf">
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:layout_marginHorizontal="20dp"
+        android:textSize="25sp"
         android:text="Cadastrar-se"
         android:id="@+id/btCadastrarCad"
         android:layout_marginTop="30dp">
     </Button>
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Entrar"
-        android:textSize="30sp"
-        android:id="@+id/btEntrarCad">
-    </Button>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:clickable="true"
+        android:id="@+id/btEntrarCad">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Já tem uma conta? "
+            android:clickable="false"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fazer login"
+            android:textColor="@color/azulclaro"
+            android:clickable="false"/>
+    </LinearLayout>
 
 </LinearLayout>

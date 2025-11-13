@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Tela_Problemas extends AppCompatActivity {
     FloatingActionButton btproximoinfra;
     TextView txtLocal;
-    CheckBox btasfalto, btvazamento, btfaltaposte, btfaltageral, btcalcada, btarvoreanormal, btausenciaasfalto, btproblemasemaforo, btindicacao;
+    CheckBox btasfalto, btvazamento, btfaltaposte, btfaltageral, btcalcada, btarvoreanormal, btoutro, btproblemasemaforo, btindicacao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,22 +39,22 @@ public class Tela_Problemas extends AppCompatActivity {
         btfaltageral = findViewById(R.id.btfaltageral);
         btcalcada = findViewById(R.id.btcalcada);
         btarvoreanormal = findViewById(R.id.btarvoreanormal);
-        btausenciaasfalto = findViewById(R.id.btausenciaasfalto);
+        btoutro = findViewById(R.id.btoutro);
         btproblemasemaforo = findViewById(R.id.btproblemasemaforo);
         btindicacao = findViewById(R.id.btindicacao);
 
 
         btproximoinfra.setOnClickListener(view -> {
             ArrayList<String> problemasSelecionados = new ArrayList<>();
-            if (btasfalto.isChecked()) problemasSelecionados.add("* Asfalto Danificado");
-            if (btvazamento.isChecked()) problemasSelecionados.add("* Vazamento de Esgoto");
-            if (btfaltaposte.isChecked()) problemasSelecionados.add("* Falta de Energia (Poste)");
-            if (btfaltageral.isChecked()) problemasSelecionados.add("* Falta de Energia (Geral)");
-            if (btcalcada.isChecked()) problemasSelecionados.add("* Calçada Danificada");
-            if (btarvoreanormal.isChecked()) problemasSelecionados.add("* Árvore de Tamanho Anormal");
-            if (btausenciaasfalto.isChecked()) problemasSelecionados.add("* Ausência de Asfalto");
-            if (btproblemasemaforo.isChecked()) problemasSelecionados.add("* Problema de Semáforo");
-            if (btindicacao.isChecked()) problemasSelecionados.add("* Falta de Indicação na Rua");
+            if (btasfalto.isChecked()) problemasSelecionados.add("• Problemas com o asfalto");
+            if (btvazamento.isChecked()) problemasSelecionados.add("• Vazamento de esgoto");
+            if (btfaltaposte.isChecked()) problemasSelecionados.add("• Falta de energia (poste)");
+            if (btfaltageral.isChecked()) problemasSelecionados.add("• Falta de energia (geral)");
+            if (btcalcada.isChecked()) problemasSelecionados.add("• Calçada danificada");
+            if (btarvoreanormal.isChecked()) problemasSelecionados.add("• Árvore de tamanho anormal");
+            if (btproblemasemaforo.isChecked()) problemasSelecionados.add("• Problema de semáforo");
+            if (btindicacao.isChecked()) problemasSelecionados.add("• Falta de indicação na rua");
+            if (btoutro.isChecked()) problemasSelecionados.add("• Outro (detalhar)");
 
 
             Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,7 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Tela_Login extends AppCompatActivity {
-    Button btLogin, btCadastro;
+    Button btLogin;
+    LinearLayout btCadastro;
     EditText txtEmailLogin, txtSenhaLogin;
 
     @Override
