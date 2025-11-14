@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -137,7 +138,7 @@ public class Tela_Mapas extends AppCompatActivity {
     }
 
     public void pesquisarEndereco() {
-        String endereco = txtPesquisa.getText().toString();
+        String endereco = txtPesquisa.getText().toString() + ", Guarulhos";
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -162,6 +163,13 @@ public class Tela_Mapas extends AppCompatActivity {
                                 marcadorPesquisa.setPosition(locEndereco);
                                 marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                                 map.getOverlays().add(marcadorPesquisa);
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(Tela_Mapas.this, "Local não encontrado. Pesquise uma localização de Guarulhos válida", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
