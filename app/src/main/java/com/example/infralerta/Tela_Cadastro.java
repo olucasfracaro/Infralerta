@@ -3,6 +3,8 @@ package com.example.infralerta;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -40,6 +42,46 @@ public class Tela_Cadastro extends AppCompatActivity {
         txtCADEmail = findViewById(R.id.txtEmailCad);
         txtCADSenha = findViewById(R.id.txtSenhaCad);
         txtCADCPF = findViewById(R.id.txtcpf);
+
+        txtCADCPF.addTextChangedListener(new TextWatcher() {
+            boolean atualizando = false;
+            final String mascara = "###.###.###-##";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int inicio, int antes, int depois) {}
+
+            @Override
+            public void onTextChanged(CharSequence texto, int inicio, int antes, int quantidade) {
+                if (atualizando) return;
+
+                // Remove tudo que não for número
+                String somenteNumeros = texto.toString().replaceAll("[^0-9]", "");
+                StringBuilder textoMascarado = new StringBuilder();
+
+                int i = 0;
+                for (char m : mascara.toCharArray()) {
+                    if (m != '#' && somenteNumeros.length() > i) {
+                        textoMascarado.append(m);
+                    } else {
+                        try {
+                            textoMascarado.append(somenteNumeros.charAt(i));
+                            i++;
+                        } catch (Exception e) {
+                            break;
+                        }
+                    }
+                }
+
+                atualizando = true;
+                txtCADCPF.setText(textoMascarado.toString());
+                txtCADCPF.setSelection(textoMascarado.length());
+                atualizando = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         txtCADNome = findViewById(R.id.txtNomeCad);
 
         //tirei o Intent para otimizar o código
