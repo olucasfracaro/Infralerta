@@ -124,7 +124,13 @@ public class Tela_Mapas extends AppCompatActivity {
         });
 
         btMapaMapa.setOnClickListener(v -> {
-
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+                pedirPermissoesSeNecessario(permissoes);
+            } else {
+                obterLocalizacao();
+            }
         });
 
         btMapaDenuncia.setOnClickListener((v -> {
