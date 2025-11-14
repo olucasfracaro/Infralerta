@@ -25,7 +25,7 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
-            android:hint="Pesquise um local">
+            android:hint="Pesquise um endereco">
             <EditText
                 android:id="@+id/txtPesquisa"
                 android:layout_width="220dp"
@@ -55,7 +55,7 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:gravity="center">
 

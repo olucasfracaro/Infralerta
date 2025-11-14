@@ -1,6 +1,7 @@
 package com.example.infralerta;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,8 +24,6 @@ public class Tela_Detalhes extends AppCompatActivity {
     EditText txtDetalhamento;
     String localselecionado;
     LinearLayout layoutproblemas;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +60,24 @@ public class Tela_Detalhes extends AppCompatActivity {
             }
         }
 
-
         btVoltarDetalhe.setOnClickListener(v -> finish());
 
         btEnviar.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
             BancoControllerDenuncias bd = new BancoControllerDenuncias(getBaseContext());
+
+            int userId = prefs.getInt("user_id", -1);
             String problemasStr = problemasParaString(problemas);
             String descricao = txtDetalhamento.getText().toString();
 
-            bd.criarDenuncia(localselecionado, coordenadas, problemasStr, descricao);
+            Denuncia novaDenuncia = new Denuncia(userId, localselecionado, coordenadas, problemasStr, descricao);
 
-            Toast.makeText(getBaseContext(), "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
-            finish();
+            if (bd.criarDenuncia(novaDenuncia)) {
+                Toast.makeText(getBaseContext(), "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Falha ao criar denúncia.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

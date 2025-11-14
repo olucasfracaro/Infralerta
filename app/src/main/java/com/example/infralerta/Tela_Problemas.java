@@ -31,6 +31,7 @@ public class Tela_Problemas extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         btproximoinfra = findViewById(R.id.btproximoinfra);
         txtLocal = findViewById(R.id.txtLocal);
         btasfalto = findViewById(R.id.btasfalto);
@@ -58,9 +59,13 @@ public class Tela_Problemas extends AppCompatActivity {
 
 
             Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);
+            String coordenadas = getIntent().getStringExtra("coordenadas");
+
             detalhes.putStringArrayListExtra("problemasSelecionados", problemasSelecionados);
             detalhes.putExtra("local", txtLocal.getText().toString());
+            detalhes.putExtra("coordenadas", coordenadas);
             startActivity(detalhes);
+            finish();
         });
 
         txtLocal = findViewById(R.id.txtLocal);

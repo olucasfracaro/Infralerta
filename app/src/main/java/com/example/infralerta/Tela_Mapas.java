@@ -110,9 +110,11 @@ public class Tela_Mapas extends AppCompatActivity {
             if (txtPesquisa.length()!=0) {
                 Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
                 localselecionado = txtPesquisa.getText().toString();
+
+                String localSelecionado = localselecionado.substring(0, 1).toUpperCase() + localselecionado.substring(1);
                 String coordenadas = String.format("%f,%f", address.getLatitude(), address.getLongitude());
 
-                Problema.putExtra("local", localselecionado);
+                Problema.putExtra("local", localSelecionado);
                 Problema.putExtra("coordenadas", coordenadas);
                 startActivity(Problema);
             } else {
@@ -161,7 +163,7 @@ public class Tela_Mapas extends AppCompatActivity {
                                 controlador.setZoom(20.0);
 
                                 Marker marcadorPesquisa = new Marker(map);
-                                marcadorPesquisa.setTitle("Você pesquisou este local!");
+                                marcadorPesquisa.setTitle("Você pesquisou este endereco!");
                                 marcadorPesquisa.setSubDescription("Clique para dispensar essa mensagem");
                                 marcadorPesquisa.setPosition(locEndereco);
                                 marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
