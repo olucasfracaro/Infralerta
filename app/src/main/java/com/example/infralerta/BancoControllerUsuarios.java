@@ -70,12 +70,12 @@ public class BancoControllerUsuarios {
         db.close();
         return true;
     }
-
-    public Cursor carregarDadosLogin(String _email, String _senha) {
+    
+    public Cursor carregarDadosLogin(String _email, String _senhaHash) {
         SQLiteDatabase db = banco.getReadableDatabase();
         String[] campos = {"user_id", "nome", "email", "senha", "cpf"};
         String where = "email = ? AND senha = ?";
-        String[] args = {_email, _senha};
+        String[] args = {_email, _senhaHash};
 
         Cursor cursor = db.query("usuarios", campos, where, args, null, null, null, null);
 

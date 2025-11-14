@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -47,7 +48,7 @@ public class Tela_Login extends AppCompatActivity {
     }
 
     private void verificarDados() {
-        String email = txtEmailLogin.getText().toString();
+        String email = txtEmailLogin.getText().toString().trim(); // .trim() remove espaços extras
         String senhaInserida = txtSenhaLogin.getText().toString();
 
         if (email.isEmpty() || senhaInserida.isEmpty()) {
@@ -56,40 +57,46 @@ public class Tela_Login extends AppCompatActivity {
         }
 
         BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
-        Cursor dados = null;
-        try {
-            dados = bd.carregarDadosLogin(email, senhaInserida);
+        //gera o hash da senha que o usuário inseriu
+        String senhaInseridaHash = Tela_Cadastro.sha256(senhaInserida);
 
-            //move para a primeira linha e verifica se ela existe
+        //faz a consulta no banco de dados
+        try (Cursor dados = bd.carregarDadosLogin(email, senhaInseridaHash)) {
+
+            //verifica se a consulta retornou dados e se os dados conferem
             if (dados != null && dados.moveToFirst()) {
-                //sucesso, agora é só pegar o user_id pro prefs.
+                //LOGIN SUCEDIDO!
+
+                //pega o user_id da consulta
                 int columnIndex = dados.getColumnIndex("user_id");
                 if (columnIndex != -1) {
                     int user_id = dados.getInt(columnIndex);
 
-                    //salvando no prefs
+                    //salva o user_id nas prefs
                     SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt("user_id", user_id);
                     editor.apply();
 
-                    //apagando campos e mudando de tela
                     txtEmailLogin.setText("");
                     txtSenhaLogin.setText("");
                     Intent it = new Intent(Tela_Login.this, Tela_Mapas.class);
                     startActivity(it);
+
                 } else {
-                    Toast.makeText(this, "Erro: coluna de usuário não encontrada", Toast.LENGTH_SHORT).show();
+                    //coluna 'user_id' não foi encontrada na consulta
+                    Toast.makeText(this, "Erro crítico: coluna de usuário não encontrada.", Toast.LENGTH_SHORT).show();
                 }
 
             } else {
                 //login falho
-                Toast.makeText(this, "Usuário ou senha inválidos. Verifique os dados e tente novamente", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Usuário ou senha inválidos.", Toast.LENGTH_LONG).show();
             }
-        } finally {
-            if (dados != null) {
-                dados.close();
-            }
+        } catch (Exception e) {
+            //qualquer outra exceção que possa ocorrer
+            Toast.makeText(this, "Ocorreu um erro durante o login.", Toast.LENGTH_SHORT).show();
+            Log.e("Tela_Login", "Erro ao verificar dados de login", e);
         }
     }
+
 }

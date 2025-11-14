@@ -6,7 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CriaBanco extends SQLiteOpenHelper {
     private static final String NOME_BANCO = "banco_infra.db";
-    private static final int VERSAO = 3;
+    /*
+    * VERSAO 1: Inicial
+    * VERSAO 2: Sistema de Login
+    * VERSAO 3: Atualização das Denúncias
+    * VERSAO 4: Hashing das senhas
+    */
+    private static final int VERSAO = 4;
     public CriaBanco(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
     }
@@ -17,7 +23,7 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + "user_id integer primary key autoincrement,"
                 + "nome text,"
                 + "email text,"
-                + "senha text,"
+                + "senha text," //SHA-256
                 + "cpf text)";
         db.execSQL(sql);
 
@@ -32,7 +38,7 @@ public class CriaBanco extends SQLiteOpenHelper {
         db.execSQL(sql);
 
         db.execSQL("INSERT INTO usuarios (nome, email, senha, cpf) " +
-                    "VALUES ('Administrador','admin@infralerta.com','admin','000.000.000-00')");
+                    "VALUES ('Administrador','admin@infralerta.com','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918','000.000.000-00')");
     }
 
     @Override

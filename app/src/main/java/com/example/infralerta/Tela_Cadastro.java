@@ -3,11 +3,13 @@ package com.example.infralerta;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,7 +63,9 @@ public class Tela_Cadastro extends AppCompatActivity {
         } else {
             BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
 
-            if (bd.criarUsuario(txtNome, txtEmail, txtSenha, txtCPF)) {
+            String txtSenhaHash = sha256(txtSenha);
+
+            if (bd.criarUsuario(txtNome, txtEmail, txtSenhaHash, txtCPF)) {
                 Toast.makeText(this, "Usuário cadastrado.", Toast.LENGTH_LONG).show();
 
                 //salva o usuário para o próximo login
@@ -80,6 +84,25 @@ public class Tela_Cadastro extends AppCompatActivity {
             limparCampos();
         }
     }
+
+    public static String sha256(String input) {
+        try {
+            //cria o MessageDigest e depois calcula o hash
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            //converte o hash em uma string hexadecimal
+            StringBuilder hex = new StringBuilder();
+            for (byte b : hash) {
+                hex.append(String.format("%02x", b));
+            }
+            return hex.toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void limparCampos(){
         txtCADCPF.setText("");
         txtCADNome.setText("");
