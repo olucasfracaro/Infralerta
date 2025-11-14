@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,6 +21,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -47,7 +49,7 @@ public class Tela_Mapas extends AppCompatActivity {
     IMapController controlador;
     EditText txtPesquisa;
     String localselecionado;
-
+    Drawable drawMarcador;
     MyLocationNewOverlay mLocationOverlay;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
@@ -98,6 +100,7 @@ public class Tela_Mapas extends AppCompatActivity {
             obterLocalizacao();
         }
 
+        drawMarcador = ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_location_on_48, null);
 
         btLogout = findViewById(R.id.btLogout);
         btMais = findViewById(R.id.btMais);
@@ -173,6 +176,7 @@ public class Tela_Mapas extends AppCompatActivity {
                                 marcadorPesquisa.setSubDescription("Clique para dispensar essa mensagem");
                                 marcadorPesquisa.setPosition(locEndereco);
                                 marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                                marcadorPesquisa.setIcon(drawMarcador);
                                 map.getOverlays().add(marcadorPesquisa);
                             }
                         });
@@ -222,6 +226,7 @@ public class Tela_Mapas extends AppCompatActivity {
                         marcadorUsuario.setSubDescription("Clique para dispensar essa mensagem");
                         marcadorUsuario.setPosition(locUsuario);
                         marcadorUsuario.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                        marcadorUsuario.setIcon(drawMarcador);
                         map.getOverlays().add(marcadorUsuario);
                     } else {
                         GeoPoint pontoInicio = new GeoPoint(-23.4667301, -46.5403522,15);
