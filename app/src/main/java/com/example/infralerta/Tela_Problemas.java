@@ -59,14 +59,14 @@ public class Tela_Problemas extends AppCompatActivity {
 
             Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);
             detalhes.putStringArrayListExtra("problemasSelecionados", problemasSelecionados);
-            detalhes.putExtra("a", txtLocal.getText().toString());
+            detalhes.putExtra("local", txtLocal.getText().toString());
             startActivity(detalhes);
         });
 
         txtLocal = findViewById(R.id.txtLocal);
 
         Intent intent = getIntent();
-        String localRecebido = intent.getStringExtra("a");
+        String localRecebido = intent.getStringExtra("local");
 
         if (localRecebido != null) {
             txtLocal.setText(localRecebido);

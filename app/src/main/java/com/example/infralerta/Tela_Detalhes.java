@@ -2,8 +2,10 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class Tela_Detalhes extends AppCompatActivity {
     FloatingActionButton btVoltarDetalhe, btEnviar;
     TextView txtlocalselecionado;
+    EditText txtDetalhamento;
     String localselecionado;
     LinearLayout layoutproblemas;
 
@@ -37,10 +40,13 @@ public class Tela_Detalhes extends AppCompatActivity {
         btEnviar = findViewById(R.id.btEnvio);
         txtlocalselecionado = findViewById(R.id.txtlocalselecionado);
         txtlocalselecionado.setText(localselecionado);
+        txtDetalhamento = findViewById(R.id.inDetalhamento);
         layoutproblemas = findViewById(R.id.layoutproblemas);
 
         Intent detalhes = getIntent();
-        localselecionado = getIntent().getExtras().getString("a");
+        localselecionado = getIntent().getExtras().getString("local");
+        String coordenadas = getIntent().getExtras().getString("coordenadas");
+
         if (localselecionado != null) {
             txtlocalselecionado.setText(localselecionado);
         }
@@ -56,13 +62,25 @@ public class Tela_Detalhes extends AppCompatActivity {
         }
 
 
+        btVoltarDetalhe.setOnClickListener(v -> finish());
 
-        btVoltarDetalhe.setOnClickListener(v -> {
-            Intent Mapa = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
-            startActivity(Mapa);
+        btEnviar.setOnClickListener(v -> {
+            BancoControllerDenuncias bd = new BancoControllerDenuncias(getBaseContext());
+            String problemasStr = problemasParaString(problemas);
+            String descricao = txtDetalhamento.getText().toString();
+
+            bd.criarDenuncia(localselecionado, coordenadas, problemasStr, descricao);
+
+            Toast.makeText(getBaseContext(), "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
 
-
+    public static String problemasParaString(ArrayList<String> _problemas) {
+        StringBuilder sbProblemas = new StringBuilder();
+        for (String prob : _problemas) {
+            sbProblemas.append(prob).append(";");
+        }
+        return sbProblemas.toString();
     }
 }

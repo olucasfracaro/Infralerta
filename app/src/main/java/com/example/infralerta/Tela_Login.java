@@ -58,7 +58,7 @@ public class Tela_Login extends AppCompatActivity {
         BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
         Cursor dados = null;
         try {
-            dados = bd.carregaDadosLogin(email, senhaInserida);
+            dados = bd.carregarDadosLogin(email, senhaInserida);
 
             //move para a primeira linha e verifica se ela existe
             if (dados != null && dados.moveToFirst()) {

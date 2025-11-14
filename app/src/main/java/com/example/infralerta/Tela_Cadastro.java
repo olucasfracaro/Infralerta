@@ -61,7 +61,7 @@ public class Tela_Cadastro extends AppCompatActivity {
         } else {
             BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
 
-            if (bd.insereDados(txtNome, txtEmail, txtSenha, txtCPF)) {
+            if (bd.criarUsuario(txtNome, txtEmail, txtSenha, txtCPF)) {
                 Toast.makeText(this, "Usuário cadastrado.", Toast.LENGTH_LONG).show();
 
                 //salva o usuário para o próximo login

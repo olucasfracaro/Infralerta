@@ -51,6 +51,8 @@ public class Tela_Mapas extends AppCompatActivity {
     MyLocationNewOverlay mLocationOverlay;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
+    private Address address;
+
     // obtendo o nome do pacote; é necessário para identificar o client para acessar o mapa;
     static final String userAgent = BuildConfig.LIBRARY_PACKAGE_NAME+"/"+BuildConfig.VERSION_NAME;
     @Override
@@ -102,15 +104,16 @@ public class Tela_Mapas extends AppCompatActivity {
         btMapaMapa = findViewById(R.id.btmapamapa);
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
 
-        btLogout.setOnClickListener(v -> {
-            logout();
-        });
+        btLogout.setOnClickListener(v -> logout());
 
         btMais.setOnClickListener(view -> {
             if (txtPesquisa.length()!=0) {
                 Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
                 localselecionado = txtPesquisa.getText().toString();
-                Problema.putExtra("a", localselecionado);
+                String coordenadas = String.format("%f,%f", address.getLatitude(), address.getLongitude());
+
+                Problema.putExtra("local", localselecionado);
+                Problema.putExtra("coordenadas", coordenadas);
                 startActivity(Problema);
             } else {
                 Toast.makeText(this, "Pesquise uma localização antes de criar uma denúncia", Toast.LENGTH_SHORT).show();
@@ -147,7 +150,7 @@ public class Tela_Mapas extends AppCompatActivity {
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(endereco,1);
                     if (addressList != null && !addressList.isEmpty()) {
-                        Address address = addressList.get(0);
+                        address = addressList.get(0);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

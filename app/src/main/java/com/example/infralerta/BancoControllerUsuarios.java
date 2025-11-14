@@ -12,9 +12,8 @@ public class BancoControllerUsuarios {
 
     public BancoControllerUsuarios(Context context) {
         banco = new CriaBanco(context);
-
     }
-    public boolean insereDados(String _nome, String _email, String _senha, String _cpf) {
+    public boolean criarUsuario(String _nome, String _email, String _senha, String _cpf) {
         ContentValues valores;
         long resultado;
         db = banco.getWritableDatabase();
@@ -34,32 +33,29 @@ public class BancoControllerUsuarios {
             return true;
     }
 
-    public String alteraDados(int id, String nome, String email){
-
-        String msg = "Dados alterados com sucesso!!!" ;
-
+    public boolean alterarUsuario(int _id, String _nome, String _email, String _senha, String _cpf) {
         db = banco.getReadableDatabase();
 
-        ContentValues valores = new ContentValues() ;
-        valores.put("nome" , nome ) ;
-        valores.put("email", email) ;
+        ContentValues valores = new ContentValues();
+        if (_nome != null) valores.put("nome" , _nome);
+        if (_email != null) valores.put("email", _email);
+        if (_senha != null) valores.put("senha", _senha);
+        if (_cpf != null) valores.put("cpf", _cpf);
 
-        String condicao = "user_id = " + id;
+        String condicao = "user_id = " + _id;
 
-        int linha ;
-        linha = db.update("contatos", valores, condicao, null) ;
+        int linha;
+        linha = db.update("contatos", valores, condicao, null);
 
         if (linha < 1){
-            msg = "Erro ao alterar os dados" ;
+            return false;
         }
 
         db.close();
-        return msg;
+        return true;
     }
 
-    public String excluirDados(String _tabela, int _id){
-        String msg = "Registro Excluído com sucesso!" ;
-
+    public boolean excluirUsuario(String _tabela, int _id) {
         db = banco.getReadableDatabase();
 
         String condicao = "user_id = " + _id ;
@@ -67,15 +63,15 @@ public class BancoControllerUsuarios {
         int linhas ;
         linhas = db.delete(_tabela, condicao, null) ;
 
-        if ( linhas < 1) {
-            msg = "Erro ao Excluir" ;
+        if (linhas < 1) {
+            return false;
         }
 
         db.close();
-        return msg;
+        return true;
     }
 
-    public Cursor carregaDadosLogin(String _email, String _senha) {
+    public Cursor carregarDadosLogin(String _email, String _senha) {
         SQLiteDatabase db = banco.getReadableDatabase();
         String[] campos = {"user_id", "nome", "email", "senha", "cpf"};
         String where = "email = ? AND senha = ?";
