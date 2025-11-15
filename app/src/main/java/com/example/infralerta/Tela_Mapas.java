@@ -87,7 +87,7 @@ public class Tela_Mapas extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
         controlador = map.getController();
-        controlador.setZoom(20.0);
+        controlador.setZoom(19.0);
 
         mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
 
@@ -169,7 +169,7 @@ public class Tela_Mapas extends AppCompatActivity {
                                 GeoPoint locEndereco = new GeoPoint(address.getLatitude(),address.getLongitude());
                                 controlador = map.getController();
                                 controlador.animateTo(locEndereco);
-                                controlador.setZoom(20.0);
+                                controlador.setZoom(19.0);
 
                                 Marker marcadorPesquisa = new Marker(map);
                                 marcadorPesquisa.setTitle("Você pesquisou este endereco!");
@@ -219,7 +219,7 @@ public class Tela_Mapas extends AppCompatActivity {
 
                 map.post(() -> {
                     if (locUsuario != null) {
-                        controlador.setZoom(20.0);
+                        controlador.setZoom(19.0);
                         controlador.setCenter(locUsuario);
                         Marker marcadorUsuario = new Marker(map);
                         marcadorUsuario.setTitle("Você está aqui!");
