@@ -9,10 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tela_Mapas extends AppCompatActivity {
-    FloatingActionButton btLogout, btMais, btMapaMapa, btMapaDenuncia;
+    FloatingActionButton btMenuUsuario, btMais, btMapaMapa, btMapaDenuncia;
     MapView map;
     IMapController controlador;
     EditText txtPesquisa;
@@ -67,6 +65,8 @@ public class Tela_Mapas extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
 
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
@@ -102,12 +102,16 @@ public class Tela_Mapas extends AppCompatActivity {
 
         drawMarcador = ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_location_on_48, null);
 
-        btLogout = findViewById(R.id.btLogout);
+        btMenuUsuario = findViewById(R.id.btMenuUsuario);
         btMais = findViewById(R.id.btMais);
         btMapaMapa = findViewById(R.id.btmapamapa);
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
 
-        btLogout.setOnClickListener(v -> logout());
+        btMenuUsuario.setOnClickListener(v -> {
+            Intent it = new Intent(Tela_Mapas.this, Tela_Usuario.class);
+            startActivity(it);
+            if (prefs.getInt("user_id", -1) == -1) finish();
+        });
 
         btMais.setOnClickListener(view -> {
             if (txtPesquisa.length()!=0) {
@@ -140,15 +144,6 @@ public class Tela_Mapas extends AppCompatActivity {
             Intent Denuncia = new Intent(Tela_Mapas.this, Tela_Denuncias.class);
             startActivity(Denuncia);
         }));
-    }
-
-    private void logout() {
-        SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.clear();
-        editor.apply();
-        finish();
     }
 
     public void pesquisarEndereco() {

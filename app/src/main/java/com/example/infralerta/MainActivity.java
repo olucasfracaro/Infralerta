@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (user_id > -1) {
                 Intent it = new Intent(context, Tela_Mapas.class);
+                it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(it);
             }
         } catch (Exception e) {

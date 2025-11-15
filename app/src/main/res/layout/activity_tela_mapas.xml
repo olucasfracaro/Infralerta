@@ -15,10 +15,10 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/round_logout_48"
+            android:src="@drawable/round_person_48"
             app:tint="@color/branco"
             app:backgroundTint="@color/purpura"
-            android:id="@+id/btLogout">
+            android:id="@+id/btMenuUsuario">
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
         <com.google.android.material.textfield.TextInputLayout

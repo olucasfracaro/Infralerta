@@ -73,7 +73,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/baseline_check_circle_24"
+                android:src="@drawable/round_report_problem_24"
                 app:tint="@color/purpura"
                 />
             <LinearLayout
@@ -135,7 +135,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/send_24"
+        android:src="@drawable/round_send_24"
         app:tint="@color/branco"
         android:backgroundTint="@color/purpura"
         android:id="@+id/btEnvio">

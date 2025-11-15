@@ -43,6 +43,7 @@ public class Tela_Login extends AppCompatActivity {
 
         btCadastro.setOnClickListener(view -> {
             Intent cadastro = new Intent(Tela_Login.this, Tela_Cadastro.class);
+            cadastro.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(cadastro);
         });
     }
@@ -53,6 +54,10 @@ public class Tela_Login extends AppCompatActivity {
 
         if (email.isEmpty() || senhaInserida.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "E-mail inválido", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -81,6 +86,7 @@ public class Tela_Login extends AppCompatActivity {
                     txtEmailLogin.setText("");
                     txtSenhaLogin.setText("");
                     Intent it = new Intent(Tela_Login.this, Tela_Mapas.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(it);
 
                 } else {

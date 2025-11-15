@@ -78,7 +78,7 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    
+
     <com.google.android.material.textfield.TextInputLayout
         style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
@@ -89,7 +89,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="phone"
             android:maxLength="14"
             android:id="@+id/txtcpf">
         </EditText>
