@@ -43,9 +43,18 @@ public class Tela_Denuncias extends AppCompatActivity {
         BancoControllerDenuncias bd = new BancoControllerDenuncias(getBaseContext());
 
         ArrayList<Integer> denunciasIds = bd.buscarDenunciasPorUserId(userId);
+        ArrayList<Denuncia> denunciasAlfabetica = new ArrayList<>();
 
         for (int denunciaId : denunciasIds) {
             Denuncia denuncia = bd.buscarDenunciaPorId(userId, denunciaId);
+            denunciasAlfabetica.add(denuncia);
+        }
+
+        //ordenar pelo endereço
+        denunciasAlfabetica.sort(Comparator.comparing(Denuncia::getEndereco, String.CASE_INSENSITIVE_ORDER));
+
+        for (Denuncia denuncia : denunciasAlfabetica) {
+            int denunciaId = denuncia.getDenunciaId();
             String data = denuncia.getData();
             String local = denuncia.getEndereco();
 
