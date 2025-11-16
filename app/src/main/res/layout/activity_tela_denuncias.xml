@@ -13,29 +13,38 @@
         android:layout_height="wrap_content"
         android:text="Denúncias enviadas"
         android:textSize="30sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_marginBottom="10dp"/>
 
-    <View
-        android:layout_width="0dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout
+            android:id="@+id/llDenuncias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
 
+    <!-- Barra de botões inferior -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="6dp">
+        android:paddingTop="10dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btMapaDenunc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fabCustomSize="66dp"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_location_on_48"
             app:tint="@color/material_dynamic_neutral50"
-            app:backgroundTint="@color/cinza"
-            android:id="@+id/btMapaDenunc" />
+            app:backgroundTint="@color/cinza" />
 
         <View
             android:layout_width="0dp"

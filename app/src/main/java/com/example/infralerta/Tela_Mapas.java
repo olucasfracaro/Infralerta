@@ -220,6 +220,7 @@ public class Tela_Mapas extends AppCompatActivity {
 
                 map.post(() -> {
                     if (locUsuario != null) {
+                        limparMarcadoresAntigos();
                         controlador.setZoom(19.0);
                         controlador.setCenter(locUsuario);
                         Marker marcadorUsuario = new Marker(map);

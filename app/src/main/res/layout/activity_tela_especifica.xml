@@ -1,20 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:padding="10dp">
 
     <TextView
+        android:id="@+id/tvTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Situação da Denúncia"
-        android:textSize="30sp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
-        >
+        android:text="Situação da Denúncia"
+        android:textSize="30sp" />
 
-    </TextView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvDenuncia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTitulo"
+        android:layout_margin="10dp">
 
-</LinearLayout>
+        <!-- Usando um LinearLayout vertical simples. Mais fácil de controlar. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Linha 1: Local -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/baseline_location_on_48"
+                    app:tint="@color/purpura" />
+
+                <TextView
+                    android:id="@+id/txtLocal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Endereço da denúncia"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Linha 2: Data -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/round_calendar_today_24"
+                    app:tint="@color/azulclaro" />
+
+                <TextView
+                    android:id="@+id/txtData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="dd/mm/yyyy"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Linha 3: Problemas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/round_report_problem_24" />
+
+                <TextView
+                    android:layout_gravity="center|start"
+                    android:id="@+id/txtProblemas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="• Problema 1\n• Problema 2"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <!-- Linha 4: Detalhamento -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="4dp"
+                    android:src="@drawable/round_article_24"
+                    app:tint="@color/purpura" />
+
+                <TextView
+                    android:id="@+id/txtDetalhamento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Descrição detalhada"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="20dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purpura"
+            android:src="@drawable/round_arrow_back_24"
+            app:fabCustomSize="66dp"
+            app:tint="@color/branco" />
+    </LinearLayout>
+
+</RelativeLayout>
+

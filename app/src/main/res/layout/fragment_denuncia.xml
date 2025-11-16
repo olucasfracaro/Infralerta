@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|top">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        app:cardElevation="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clDenuncia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/ic_report"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/round_report_24"
+                app:tint="@color/purpura"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!-- Rótulo Local -->
+            <TextView
+                android:id="@+id/label_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Local: "
+                android:textStyle="bold"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/ic_report"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Valor Local -->
+            <TextView
+                android:id="@+id/txtLocal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Endereço"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/label_local"
+                app:layout_constraintTop_toTopOf="@id/label_local"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Rótulo Data -->
+            <TextView
+                android:id="@+id/label_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Data: "
+                android:textStyle="bold"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@id/label_local"
+                app:layout_constraintTop_toBottomOf="@id/txtLocal" />
+
+            <!-- Valor Data -->
+            <TextView
+                android:id="@+id/txtData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="dd/mm/yyyy"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="@id/label_data"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/txtLocal" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
