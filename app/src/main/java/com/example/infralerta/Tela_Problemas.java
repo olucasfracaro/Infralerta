@@ -6,8 +6,10 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -46,17 +48,12 @@ public class Tela_Problemas extends AppCompatActivity {
 
 
         btproximoinfra.setOnClickListener(view -> {
-            ArrayList<String> problemasSelecionados = new ArrayList<>();
-            if (btasfalto.isChecked()) problemasSelecionados.add("• Problemas com o asfalto");
-            if (btvazamento.isChecked()) problemasSelecionados.add("• Vazamento de esgoto");
-            if (btfaltaposte.isChecked()) problemasSelecionados.add("• Falta de energia (poste)");
-            if (btfaltageral.isChecked()) problemasSelecionados.add("• Falta de energia (geral)");
-            if (btcalcada.isChecked()) problemasSelecionados.add("• Calçada danificada");
-            if (btarvoreanormal.isChecked()) problemasSelecionados.add("• Árvore de tamanho anormal");
-            if (btproblemasemaforo.isChecked()) problemasSelecionados.add("• Problema de semáforo");
-            if (btindicacao.isChecked()) problemasSelecionados.add("• Falta de indicação na rua");
-            if (btoutro.isChecked()) problemasSelecionados.add("• Outro (detalhar)");
+            ArrayList<String> problemasSelecionados = pegarProblemas();
 
+            if (problemasSelecionados.isEmpty()) {
+                Toast.makeText(Tela_Problemas.this, "Selecione ao menos um problema!\nUse o campo 'Outro' se necessário.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Intent detalhes = new Intent(Tela_Problemas.this, Tela_Detalhes.class);
             String coordenadas = getIntent().getStringExtra("coordenadas");
@@ -65,7 +62,6 @@ public class Tela_Problemas extends AppCompatActivity {
             detalhes.putExtra("local", txtLocal.getText().toString());
             detalhes.putExtra("coordenadas", coordenadas);
             startActivity(detalhes);
-            finish();
         });
 
         txtLocal = findViewById(R.id.txtLocal);
@@ -77,5 +73,20 @@ public class Tela_Problemas extends AppCompatActivity {
             txtLocal.setText(localRecebido);
         }
 
+    }
+
+    @NonNull
+    private ArrayList<String> pegarProblemas() {
+        ArrayList<String> problemasSelecionados = new ArrayList<>();
+        if (btasfalto.isChecked()) problemasSelecionados.add("• " + getString(R.string.probAsfalto));
+        if (btvazamento.isChecked()) problemasSelecionados.add("• " + getString(R.string.probVazaEsgoto));
+        if (btfaltaposte.isChecked()) problemasSelecionados.add("• " + getString(R.string.probEnergiaPostes));
+        if (btfaltageral.isChecked()) problemasSelecionados.add("• " + getString(R.string.probEnergiaGeral));
+        if (btcalcada.isChecked()) problemasSelecionados.add("• " + getString(R.string.probCalcada));
+        if (btarvoreanormal.isChecked()) problemasSelecionados.add("• " + getString(R.string.probTamanhoArvore));
+        if (btproblemasemaforo.isChecked()) problemasSelecionados.add("• " + getString(R.string.probSemaforo));
+        if (btindicacao.isChecked()) problemasSelecionados.add("• " + getString(R.string.probSinalizacaoRua));
+        if (btoutro.isChecked()) problemasSelecionados.add("• " + getString(R.string.probOutro));
+        return problemasSelecionados;
     }
 }

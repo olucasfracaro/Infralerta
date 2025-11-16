@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Infralerta</string>
+    <string name="app_name" translatable="false">Infralerta</string>
+    <string name="probAsfalto">Problemas com o asfalto</string>
+    <string name="probVazaEsgoto">Vazamento de Esgoto</string>
+    <string name="probEnergiaPostes">Falta de energia (postes)</string>
+    <string name="probEnergiaGeral">Falta de energia (geral)</string>
+    <string name="probCalcada">Calçada danificada</string>
+    <string name="probTamanhoArvore">Árvore de tamanho anormal</string>
+    <string name="probSemaforo">Problema de semáforo</string>
+    <string name="probSinalizacaoRua">Falta de sinalização na rua</string>
+    <string name="probOutro">Outro (detalhamento a seguir)</string>
 </resources>

@@ -118,6 +118,11 @@ public class Tela_Mapas extends AppCompatActivity {
             Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
             localselecionado = txtPesquisa.getText().toString();
 
+            if (localselecionado.isEmpty()) {
+                Toast.makeText(Tela_Mapas.this, "Preencha o campo de pesquisa ou use sua localização.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String localSelecionado = localselecionado.substring(0, 1).toUpperCase() + localselecionado.substring(1);
             String coordenadas = String.format("%f,%f", address.getLatitude(), address.getLongitude());
 

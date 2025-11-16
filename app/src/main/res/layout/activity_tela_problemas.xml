@@ -1,167 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="5dp">
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:text="Problema(s) de infraestrutura"
-        android:textSize="25sp">
-    </TextView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="350dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center">
+        android:layout_alignParentTop="true">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="20dp">
-            <ImageView
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_location_on_48"
-                app:tint="@color/purpura" />
-            <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="Problema(s) de infraestrutura"
+                android:textSize="25sp"
+                android:textAlignment="center">
+            </TextView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="Local selecionado: " />
-                <TextView
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="20dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_location_on_48"
+                        app:tint="@color/purpura" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:text="Local selecionado: " />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="18sp"
+                            android:text=""
+                            android:id="@+id/txtLocal" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="18sp"
-                    android:text=""
-                    android:id="@+id/txtLocal" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="5dp">
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probAsfalto"
+                        android:id="@+id/btasfalto"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probVazaEsgoto"
+                        android:id="@+id/btvazamento"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probEnergiaPostes"
+                        android:id="@+id/btfaltaposte"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probEnergiaGeral"
+                        android:id="@+id/btfaltageral"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probCalcada"
+                        android:id="@+id/btcalcada"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probTamanhoArvore"
+                        android:id="@+id/btarvoreanormal"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probSemaforo"
+                        android:id="@+id/btproblemasemaforo"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probSinalizacaoRua"
+                        android:id="@+id/btindicacao"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/probOutro"
+                        android:id="@+id/btoutro"
+                        android:paddingLeft="5dp">
+                    </CheckBox>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_gravity="center">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="5dp">
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Problemas com o asfalto"
-                android:id="@+id/btasfalto"
-                android:paddingLeft="5dp">
-            </CheckBox>
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Vazamento de esgoto"
-                android:id="@+id/btvazamento"
-                android:paddingLeft="5dp">
-            </CheckBox>
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Falta de energia (postes)"
-                android:id="@+id/btfaltaposte"
-                android:paddingLeft="5dp">
-            </CheckBox>
-
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Falta de energia (geral)"
-                android:id="@+id/btfaltageral"
-                android:paddingLeft="5dp">
-            </CheckBox>
-
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Calçada danificada"
-                android:id="@+id/btcalcada"
-                android:paddingLeft="5dp">
-            </CheckBox>
-
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Árvore de tamanho anormal"
-                android:id="@+id/btarvoreanormal"
-                android:paddingLeft="5dp">
-            </CheckBox>
-
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Problema de semáforo"
-                android:id="@+id/btproblemasemaforo"
-                android:paddingLeft="5dp">
-            </CheckBox>
-
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Falta de indicação na rua"
-                android:id="@+id/btindicacao"
-                android:paddingLeft="5dp">
-            </CheckBox>
-
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Outro (detalhe a seguir)"
-                android:id="@+id/btoutro"
-                android:paddingLeft="5dp">
-            </CheckBox>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
+    </ScrollView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btproximoinfra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/round_arrow_forward_24"
-        app:fabCustomSize="66dp"
-        app:tint="@color/branco"
-        android:layout_marginTop="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/purpura"
-        android:id="@+id/btproximoinfra"
-        android:layout_gravity="end">
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
-</LinearLayout>
+        android:src="@drawable/round_arrow_forward_24"
+        app:fabCustomSize="66dp"
+        app:tint="@color/branco" />
+
+</RelativeLayout>
