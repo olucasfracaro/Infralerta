@@ -28,6 +28,15 @@
             android:orientation="vertical"/>
     </ScrollView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Obrigado por ajudar a transformar nossa cidade em um lugar melhor!\nSuas denúncias serão enviadas em forma de gráfico à Prefeitura de Guarulhos."
+        android:textSize="12sp"
+        android:textColor="#adadab"
+        android:textAlignment="center"
+        />
+
     <!-- Barra de botões inferior -->
     <LinearLayout
         android:layout_width="match_parent"

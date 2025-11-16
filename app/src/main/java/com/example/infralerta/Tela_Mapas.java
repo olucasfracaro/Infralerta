@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -29,10 +30,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.BuildConfig;
 import org.osmdroid.bonuspack.location.GeocoderNominatim;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -42,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tela_Mapas extends AppCompatActivity {
-    FloatingActionButton btMenuUsuario, btMais, btMapaCentralizar, btMapaDenuncia;
+    FloatingActionButton btMenuUsuario, btMais, btMapaCentralizar, btMapaTutorial, btMapaDenuncia;
     MapView map;
     IMapController controlador;
     EditText txtPesquisa;
@@ -106,6 +109,7 @@ public class Tela_Mapas extends AppCompatActivity {
         btMenuUsuario = findViewById(R.id.btMenuUsuario);
         btMais = findViewById(R.id.btMais);
         btMapaCentralizar = findViewById(R.id.btmapacentralizar);
+        btMapaTutorial = findViewById(R.id.bttutorial);
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
 
         btMenuUsuario.setOnClickListener(v -> {
@@ -141,10 +145,79 @@ public class Tela_Mapas extends AppCompatActivity {
             }
         });
 
+        btMapaTutorial.setOnClickListener((v -> {
+            //código do tutorial aqui
+        }));
+
         btMapaDenuncia.setOnClickListener((v -> {
             Intent Denuncia = new Intent(Tela_Mapas.this, Tela_Denuncias.class);
             startActivity(Denuncia);
         }));
+
+        //adiciona o overlay de eventos ao mapa
+        MapEventsOverlay mapEventsOverlay = getEventsOverlay();
+        map.getOverlays().add(0, mapEventsOverlay);
+    }
+
+    /**
+     * Cria e configura uma camada de sobreposição de eventos para o mapa.
+     * Esta camada é responsável por capturar gestos do usuário no mapa, como cliques longos.
+     * Um {@link MapEventsReceiver} é definido para manipular esses eventos.
+     * O clique simples ({@code singleTapConfirmedHelper}) não realiza nenhuma ação.
+     * O clique longo ({@code longPressHelper}) aciona o método {@code adicionarMarcadorNoCliqueLongo}
+     * para colocar um marcador no ponto pressionado.
+     *
+     * @return Um objeto {@link MapEventsOverlay} configurado para ser adicionado às sobreposições do mapa.
+     */
+    @NonNull
+    private MapEventsOverlay getEventsOverlay() {
+        MapEventsReceiver mapEventsReceiver = new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) { //não fazer nada com clique simples
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                //função que será chamada ao pressionar e segurar
+                adicionarMarcadorNoCliqueLongo(p);
+                return true;
+            }
+        };
+
+        //cria a camada de eventos e a adiciona ao mapa
+        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(mapEventsReceiver);
+        return mapEventsOverlay;
+    }
+
+    /**
+     * Adiciona um marcador no mapa na posição de um clique longo.
+     * Este método limpa marcadores antigos, cria um novo marcador na posição fornecida,
+     * o adiciona ao mapa e inicia uma busca de endereço para essa coordenada.
+     *
+     * @param p O GeoPoint onde o clique longo ocorreu.
+     */
+    private void adicionarMarcadorNoCliqueLongo(GeoPoint p) {
+        //garante que a UI seja atualizada na thread principal
+        runOnUiThread(() -> {
+            // Limpa qualquer marcador que já esteja no mapa
+            limparMarcadoresAntigos();
+
+            //cria o novo marcador
+            Marker marcadorClique = new Marker(map);
+            marcadorClique.setPosition(p);
+            marcadorClique.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marcadorClique.setIcon(drawMarcador);
+            marcadorClique.setTitle("Local selecionado");
+
+            //adiciona o marcador ao mapa e à lista de rastreamento
+            map.getOverlays().add(marcadorClique);
+            marcadoresNoMapa.add(marcadorClique);
+            map.invalidate(); //redesenha o mapa para exibir o novo marcador
+
+            //busca o nome do endereço para as coordenadas do clique
+            buscarEnderecoPorCoordenadas(p);
+        });
     }
 
     public void pesquisarEndereco() {
