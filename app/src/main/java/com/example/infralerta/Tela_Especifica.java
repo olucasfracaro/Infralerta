@@ -47,7 +47,7 @@ public class Tela_Especifica extends AppCompatActivity {
 
         txtLocal.setText(denuncia.getEndereco());
         txtData.setText(denuncia.getData());
-        txtProblemas.setText(denuncia.getProblemas().replaceAll(";", "\n").replace("\n", ""));
+        txtProblemas.setText(denuncia.getProblemas().replaceAll(";", "\n"));
         txtDetalhamento.setText(denuncia.getDescricao());
     }
 }
