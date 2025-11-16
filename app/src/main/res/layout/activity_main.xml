@@ -1,73 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:layout_margin="16dp">
 
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_marginBottom="20dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/logo"
-        android:layout_gravity="center_horizontal">
-
-    </ImageView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bem-vindo ao Infralerta!"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:text="O Infralerta tem o objetivo de auxiliar na detecção de problemas de infraestrutura na cidade de Guarulhos através da coleta de denúncias de cidadãos. \nVamos ajudar a construir uma cidade melhor?"
-        android:textSize="25sp"
-        android:layout_marginTop="50dp">
-    </TextView>
-    
-
-    <!--
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Próximo"
-        android:textSize="20dp"
-        android:id="@+id/btproximo"
-        android:layout_marginLeft="220dp"
-        android:layout_marginTop="140dp"
-        >
-
-    </com.google.android.material.button.MaterialButton>
-    -->
     <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginBottom="20dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bem-vindo ao Infralerta!"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textAlignment="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:text="O Infralerta tem o objetivo de auxiliar na detecção de problemas de infraestrutura na cidade de Guarulhos através da coleta de denúncias de cidadãos. \nVamos ajudar a construir uma cidade melhor?"
+            android:textSize="25sp"
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:layout_gravity="end">
+        android:paddingBottom="16dp"
+        android:gravity="center_vertical">
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btCreditos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:src="@drawable/round_info_24"
+            app:fabCustomSize="66dp"
+            app:backgroundTint="?attr/colorSecondaryContainer"
+            app:tint="@color/purpura" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btProximo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fabCustomSize="66dp"
             android:src="@drawable/round_arrow_forward_24"
             app:tint="@color/branco"
             app:maxImageSize="30dp"
-            android:backgroundTint="@color/purpura"
-            android:id="@+id/btproximo"
-            android:layout_marginTop="80dp">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+            android:backgroundTint="@color/purpura" />
     </LinearLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
-    FloatingActionButton btproxima;
+    FloatingActionButton btCreditos, btProxima;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         verificaLogin(this);
 
-        btproxima = findViewById(R.id.btproximo);
+        btCreditos = findViewById(R.id.btCreditos);
+        btCreditos.setOnClickListener(view -> {
+            Intent it = new Intent(MainActivity.this, Tela_Creditos.class);
+            startActivity(it);
+        });
 
-        btproxima.setOnClickListener(view -> {
+        btProxima = findViewById(R.id.btProximo);
+        btProxima.setOnClickListener(view -> {
             Intent login = new Intent(MainActivity.this, Tela_Login.class);
             startActivity(login);
         });
