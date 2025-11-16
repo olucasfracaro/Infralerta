@@ -11,10 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--
-        PASSO 3: Barra Superior.
-        Trocamos a cor fixa por um atributo de tema que se adapta.
-    -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +19,7 @@
         android:padding="10dp"
         android:layout_margin="15dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/barra_superior"> <!-- MUDANÇA AQUI: Fundo adaptativo -->
+        android:background="@drawable/barra_superior"> <!--fundo adaptativo-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btMenuUsuario"
@@ -34,10 +30,6 @@
             app:tint="@color/branco"
             app:backgroundTint="@color/purpura"/>
 
-        <!--
-            Também é uma boa prática fazer a caixa de pesquisa se adaptar.
-            O '?attr/colorSurface' também funciona bem aqui.
-        -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"

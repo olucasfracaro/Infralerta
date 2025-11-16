@@ -52,6 +52,7 @@ public class Tela_Mapas extends AppCompatActivity {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
     private Address address;
+    private ArrayList<Marker> marcadoresNoMapa = new ArrayList<>();
 
     // obtendo o nome do pacote; é necessário para identificar o client para acessar o mapa;
     static final String userAgent = BuildConfig.LIBRARY_PACKAGE_NAME+"/"+BuildConfig.VERSION_NAME;
@@ -114,20 +115,15 @@ public class Tela_Mapas extends AppCompatActivity {
         });
 
         btMais.setOnClickListener(view -> {
-            if (txtPesquisa.length()!=0) {
-                Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
-                localselecionado = txtPesquisa.getText().toString();
+            Intent Problema = new Intent(Tela_Mapas.this, Tela_Problemas.class);
+            localselecionado = txtPesquisa.getText().toString();
 
-                String localSelecionado = localselecionado.substring(0, 1).toUpperCase() + localselecionado.substring(1);
-                String coordenadas = String.format("%f,%f", address.getLatitude(), address.getLongitude());
+            String localSelecionado = localselecionado.substring(0, 1).toUpperCase() + localselecionado.substring(1);
+            String coordenadas = String.format("%f,%f", address.getLatitude(), address.getLongitude());
 
-                Problema.putExtra("local", localSelecionado);
-                Problema.putExtra("coordenadas", coordenadas);
-                startActivity(Problema);
-            } else {
-                Toast.makeText(this, "Pesquise uma localização antes de criar uma denúncia", Toast.LENGTH_SHORT).show();
-            }
-
+            Problema.putExtra("local", localSelecionado);
+            Problema.putExtra("coordenadas", coordenadas);
+            startActivity(Problema);
         });
 
         btMapaCentralizar.setOnClickListener(v -> {
@@ -160,6 +156,8 @@ public class Tela_Mapas extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                limparMarcadoresAntigos();
+
                                 IMapController controlador = map.getController();
                                 GeoPoint locEndereco = new GeoPoint(address.getLatitude(),address.getLongitude());
                                 controlador = map.getController();
@@ -172,7 +170,10 @@ public class Tela_Mapas extends AppCompatActivity {
                                 marcadorPesquisa.setPosition(locEndereco);
                                 marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                                 marcadorPesquisa.setIcon(drawMarcador);
+
                                 map.getOverlays().add(marcadorPesquisa);
+                                marcadoresNoMapa.add(marcadorPesquisa);
+                                map.invalidate();
                             }
                         });
                     } else {
@@ -222,7 +223,12 @@ public class Tela_Mapas extends AppCompatActivity {
                         marcadorUsuario.setPosition(locUsuario);
                         marcadorUsuario.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                         marcadorUsuario.setIcon(drawMarcador);
+
                         map.getOverlays().add(marcadorUsuario);
+                        marcadoresNoMapa.add(marcadorUsuario);
+                        map.invalidate();
+
+                        buscarEnderecoPorCoordenadas(locUsuario);
                     } else {
                         GeoPoint pontoInicio = new GeoPoint(-23.4667301, -46.5403522,15);
                         controlador.setZoom(15.0);
@@ -233,6 +239,60 @@ public class Tela_Mapas extends AppCompatActivity {
                 mLocationOverlay.disableMyLocation();
             }
         });
+    }
+
+    /**
+     * Realiza a geocodificação reversa para encontrar um endereço a partir de coordenadas geográficas.
+     * Este método é executado em uma thread separada para não bloquear a UI. Ele usa o
+     * {@link GeocoderNominatim} para converter um objeto {@link GeoPoint} em uma lista de endereços.
+     * O primeiro endereço encontrado é então formatado e exibido no campo de texto {@code txtPesquisa}.
+     * Em caso de sucesso, uma notificação Toast é exibida para o usuário. Se nenhum endereço for
+     * encontrado ou ocorrer um erro, mensagens apropriadas são definidas.
+     *
+     * @param p O objeto {@link GeoPoint} contendo a latitude e longitude a serem convertidas em endereço.
+     */
+    private void buscarEnderecoPorCoordenadas(GeoPoint p) {
+        new Thread(() -> {
+            GeocoderNominatim geocoder = new GeocoderNominatim(userAgent);
+            String nomeEndereco = "";
+            try {
+                //geocodificação reversa feita com getFromLocation
+                List<Address> enderecos = geocoder.getFromLocation(p.getLatitude(), p.getLongitude(), 1);
+                if (enderecos != null && !enderecos.isEmpty()) {
+                    address = enderecos.get(0);
+
+                    //monta uma string com o endereço
+                    // address.getAddressLine(0) retorna a primeira linha completa do endereço.
+                    nomeEndereco = address.getAddressLine(0);
+                } else {
+                    nomeEndereco = "Endereço não encontrado";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                nomeEndereco = "Erro ao buscar endereço";
+            }
+
+            final String enderecoFinal = nomeEndereco;
+            runOnUiThread(() -> {
+                txtPesquisa.setText(enderecoFinal);
+                Toast.makeText(Tela_Mapas.this, "Localização atualizada!", Toast.LENGTH_SHORT).show();
+            });
+        }).start();
+    }
+
+    /**
+     * Remove todos os marcadores de pesquisa anteriores do mapa.
+     * Este método itera sobre a lista {@code marcadoresNoMapa}, removendo cada marcador
+     * da camada de sobreposição do mapa. Após a remoção, a lista é limpa e o mapa
+     * é invalidado para forçar um redesenho, garantindo que as alterações visuais
+     * sejam aplicadas imediatamente.
+     */
+    private void limparMarcadoresAntigos() {
+        for (Marker marcador : marcadoresNoMapa) {
+            map.getOverlays().remove(marcador);
+        }
+        marcadoresNoMapa.clear();
+        map.invalidate(); //redesenha o mapa
     }
 
     @Override

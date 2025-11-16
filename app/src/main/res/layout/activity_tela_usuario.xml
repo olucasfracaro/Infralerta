@@ -9,14 +9,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:text="Menu do Usuário"
-        android:textSize="30sp"
         android:layout_gravity="center_horizontal|top"
-        />
-
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:text="Menu do Usuário"
+        android:textSize="30sp" />
 
     <TextView
+        android:id="@+id/tvUSUNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -25,9 +25,10 @@
         android:textSize="15sp" />
 
     <!-- Container para o Nome de Usuário -->
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
@@ -38,29 +39,39 @@
             android:text="Nome do Usuário"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/inUSUNome"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUSUNome"
+            style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint=""
-            android:textSize="20sp"
-            android:visibility="gone" />
+            android:layout_marginBottom="10dp"
+            android:hint="Nome de usuário"
+            android:visibility="gone">
 
-    </FrameLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inUSUNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/tvUSUEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
-        android:text="Email"
+        android:text="E-mail"
         android:textStyle="bold"
         android:textSize="15sp" />
 
-    <!-- Container para o Email -->
-    <FrameLayout
+    <!-- Container para o E-mail -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
@@ -68,20 +79,29 @@
             android:id="@+id/txtUSUEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="E-mail"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/inUSUEmail"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUSUEmail"
+            style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint=""
-            android:textSize="20sp"
-            android:visibility="gone" />
+            android:layout_marginBottom="10dp"
+            android:hint="E-mail"
+            android:visibility="gone">
 
-    </FrameLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inUSUEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/tvUSUSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -91,31 +111,34 @@
         android:textSize="15sp" />
 
     <!-- Container para a Senha -->
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
-        <TextView
-            android:id="@+id/txtUSUSenha"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUSUSenha"
+            style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="********"
-            android:textSize="20sp" />
+            android:layout_marginBottom="10dp"
+            android:hint="Senha"
+            app:passwordToggleEnabled="true"
+            android:visibility="gone">
 
-        <EditText
-            android:id="@+id/inUSUSenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint=""
-            android:textSize="20sp"
-            android:inputType="textPassword"
-            android:visibility="gone" />
-
-    </FrameLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inUSUSenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/tvUSUCPF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -125,9 +148,10 @@
         android:textSize="15sp" />
 
     <!-- Container para o CPF -->
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
@@ -138,17 +162,24 @@
             android:text="CPF"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/inUSUCPF"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUSUCPF"
+            style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint=""
-            android:textSize="20sp"
-            android:inputType="phone"
-            android:maxLength="14"
-            android:visibility="gone" />
+            android:layout_marginBottom="10dp"
+            android:hint="CPF"
+            android:visibility="gone">
 
-    </FrameLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inUSUCPF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:maxLength="14"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -158,37 +189,35 @@
             android:id="@+id/fabLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
             android:layout_margin="30dp"
             android:src="@drawable/round_logout_48"
-            app:fabCustomSize="66dp"
-            app:tint="@color/purpura"
             app:backgroundTint="@color/azulclaro"
-            android:layout_gravity="bottom|start">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+            app:fabCustomSize="66dp"
+            app:tint="@color/purpura" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabEditar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
             android:layout_margin="30dp"
-            android:src="@drawable/round_edit_48"
-            app:fabCustomSize="66dp"
+            android:tint="@color/purpura"
             android:backgroundTint="@color/azulclaro"
-            android:layout_gravity="bottom|end">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+            android:src="@drawable/round_edit_48"
+            app:fabCustomSize="66dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabSalvar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:src="@drawable/round_check_48"
-            app:tint="@color/purpura"
-            app:fabCustomSize="72dp"
-            android:backgroundTint="@color/verdeclaro"
             android:layout_gravity="bottom|end"
-            android:visibility="gone">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+            android:layout_margin="30dp"
+            android:backgroundTint="@color/verdeclaro"
+            android:src="@drawable/round_check_48"
+            android:visibility="gone"
+            app:fabCustomSize="72dp"
+            app:tint="@color/purpura" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
