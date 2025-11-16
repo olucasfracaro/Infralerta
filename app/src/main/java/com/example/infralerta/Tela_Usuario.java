@@ -129,17 +129,20 @@ public class Tela_Usuario extends AppCompatActivity {
     }
 
     private void salvarAlteracoes(BancoControllerUsuarios bd, int userId) {
-        if (inUSUNome.getText().toString().trim().isEmpty()
-            || inUSUEmail.getText().toString().trim().isEmpty()
-            || inUSUCPF.getText().toString().trim().isEmpty()) {
+        String inNome = inUSUNome.getText().toString().trim();
+        String inEmail = inUSUEmail.getText().toString().trim();
+        String inCPF = inUSUCPF.getText().toString();
+
+
+        if (inNome.isEmpty() || inEmail.isEmpty() || inCPF.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(inUSUEmail.getText().toString()).matches()) {
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(inEmail).matches()) {
             Toast.makeText(this, "E-mail inválido.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (inUSUCPF.getText().toString().length() < 14) {
+        if (!Tela_Cadastro.verificarCPF(inCPF)) {
             Toast.makeText(this, "CPF inválido.", Toast.LENGTH_SHORT).show();
             return;
         }
