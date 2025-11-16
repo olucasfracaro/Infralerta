@@ -43,6 +43,7 @@ public class Tela_Detalhes extends AppCompatActivity {
         layoutproblemas = findViewById(R.id.layoutproblemas);
 
         Intent detalhes = getIntent();
+        String data = detalhes.getExtras().getString("data");
         localselecionado = getIntent().getExtras().getString("local");
         String coordenadas = getIntent().getExtras().getString("coordenadas");
 
@@ -70,11 +71,13 @@ public class Tela_Detalhes extends AppCompatActivity {
             String problemasStr = problemasParaString(problemas);
             String descricao = txtDetalhamento.getText().toString();
 
-            Denuncia novaDenuncia = new Denuncia(userId, localselecionado, coordenadas, problemasStr, descricao);
+            Denuncia novaDenuncia = new Denuncia(userId, data, localselecionado, coordenadas, problemasStr, descricao);
 
             if (bd.criarDenuncia(novaDenuncia)) {
                 Toast.makeText(getBaseContext(), "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
-                finish();
+                Intent it = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(it);
             } else {
                 Toast.makeText(this, "Falha ao criar denúncia.", Toast.LENGTH_SHORT).show();
             }

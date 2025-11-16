@@ -11,8 +11,9 @@ public class CriaBanco extends SQLiteOpenHelper {
     * VERSAO 2: Sistema de Login
     * VERSAO 3: Atualização das Denúncias
     * VERSAO 4: Hashing das senhas
+    * VERSAO 5: Registro de data
     */
-    private static final int VERSAO = 4;
+    private static final int VERSAO = 5;
     public CriaBanco(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
     }
@@ -28,17 +29,20 @@ public class CriaBanco extends SQLiteOpenHelper {
         db.execSQL(sql);
 
         sql = "CREATE TABLE denuncias ("
-                +"denuncia_id integer primary key autoincrement,"
-                +"user_id integer,"
-                +"endereco text,"
+                + "denuncia_id integer primary key autoincrement,"
+                + "user_id integer,"
+                + "data DATE,"
+                + "endereco text,"
                 + "coordenadas text,"
                 + "problemas text,"
                 + "descricao text,"
                 + "FOREIGN KEY(user_id) REFERENCES usuarios(user_id))";
         db.execSQL(sql);
 
+        /* OBSOLETO desde a validação de CPF
         db.execSQL("INSERT INTO usuarios (nome, email, senha, cpf) " +
                     "VALUES ('Administrador','admin@infralerta.com','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918','000.000.000-00')");
+        */
     }
 
     @Override

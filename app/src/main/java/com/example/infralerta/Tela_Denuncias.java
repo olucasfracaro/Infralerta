@@ -36,14 +36,15 @@ public class Tela_Denuncias extends AppCompatActivity {
 
         //puxa cada denuncia do usuario (usando user_id)
         for (Denuncia denuncia : denuncias) {
+            String data = denuncia.getData();
             String local = denuncia.getEndereco();
             String coordenadas = denuncia.getCoordenadas();
             String problemasStr = denuncia.getProblemas();
             String descricao = denuncia.getDescricao();
 
             //TODO: SUBSTITUIR ISSO POR UMA LISTA EXIBINDO AS DENÚNCIAS. RECOMENDÁVEL POR UM SCROLLVIEW!
-            System.out.printf("Local: %s\n Coordenadas: %s\n Problemas: %s\n Descrição: %s\n%n",
-                                                local, coordenadas, problemasStr, descricao);
+            System.out.printf("Data: %s\nLocal: %s\nCoordenadas: %s\nProblemas: %s\nDescrição: %s\n\n",
+                                                data, local, coordenadas, problemasStr, descricao);
         }
 
         btMapaDenunc = findViewById(R.id.btMapaDenunc);

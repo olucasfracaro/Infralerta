@@ -18,6 +18,7 @@ public class BancoControllerDenuncias {
     //constantes para nomes de tabela e colunas
     private static final String TABELA_DENUNCIAS = "denuncias";
     public static final String COLUNA_ID_USUARIO = "user_id";
+    public static final String COLUNA_DATA = "data";
     public static final String COLUNA_ENDERECO = "endereco";
     public static final String COLUNA_COORDENADAS = "coordenadas";
     public static final String COLUNA_PROBLEMAS = "problemas";
@@ -40,6 +41,7 @@ public class BancoControllerDenuncias {
             ContentValues valores = new ContentValues();
 
             valores.put(COLUNA_ID_USUARIO, denuncia.getUserId());
+            valores.put(COLUNA_DATA, denuncia.getData());
             valores.put(COLUNA_ENDERECO, denuncia.getEndereco());
             valores.put(COLUNA_COORDENADAS, denuncia.getCoordenadas());
             valores.put(COLUNA_PROBLEMAS, denuncia.getProblemas());
@@ -61,7 +63,7 @@ public class BancoControllerDenuncias {
      */
     public ArrayList<Denuncia> buscarDenunciasPorUserId(int userId) {
         ArrayList<Denuncia> listaDenuncias = new ArrayList<>();
-        String[] colunasProjetadas = {COLUNA_ENDERECO, COLUNA_COORDENADAS, COLUNA_PROBLEMAS, COLUNA_DESCRICAO};
+        String[] colunasProjetadas = {COLUNA_DATA, COLUNA_ENDERECO, COLUNA_COORDENADAS, COLUNA_PROBLEMAS, COLUNA_DESCRICAO};
         String clausulaWhere = COLUNA_ID_USUARIO + " = ?";
         String[] argumentosWhere = {String.valueOf(userId)};
 
@@ -70,6 +72,7 @@ public class BancoControllerDenuncias {
 
             if (cursor != null && cursor.moveToFirst()) {
                 // Pega os índices das colunas uma vez, antes do loop, para melhor performance.
+                int indiceData = cursor.getColumnIndexOrThrow(COLUNA_DATA);
                 int indiceEndereco = cursor.getColumnIndexOrThrow(COLUNA_ENDERECO);
                 int indiceCoordenadas = cursor.getColumnIndexOrThrow(COLUNA_COORDENADAS);
                 int indiceProblemas = cursor.getColumnIndexOrThrow(COLUNA_PROBLEMAS);
@@ -77,13 +80,14 @@ public class BancoControllerDenuncias {
 
                 do {
                     //lê os dados do cursor usando os índices obtidos.
+                    String data = cursor.getString(indiceData);
                     String endereco = cursor.getString(indiceEndereco);
                     String coordenadas = cursor.getString(indiceCoordenadas);
                     String problemas = cursor.getString(indiceProblemas);
                     String descricao = cursor.getString(indiceDescricao);
 
                     //cria um objeto 'Denuncia' e o adiciona à lista.
-                    Denuncia denuncia = new Denuncia(endereco, coordenadas, problemas, descricao);
+                    Denuncia denuncia = new Denuncia(data, endereco, coordenadas, problemas, descricao);
                     listaDenuncias.add(denuncia);
                 } while (cursor.moveToNext());
             }

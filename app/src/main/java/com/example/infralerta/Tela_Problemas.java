@@ -3,8 +3,6 @@ package com.example.infralerta;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Tela_Problemas extends AppCompatActivity {
     FloatingActionButton btproximoinfra;
@@ -50,6 +50,11 @@ public class Tela_Problemas extends AppCompatActivity {
         btproximoinfra.setOnClickListener(view -> {
             ArrayList<String> problemasSelecionados = pegarProblemas();
 
+            LocalDateTime ldt = LocalDateTime.now();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            String data = ldt.format(dtf);
+
             if (problemasSelecionados.isEmpty()) {
                 Toast.makeText(Tela_Problemas.this, "Selecione ao menos um problema!\nUse o campo 'Outro' se necessário.", Toast.LENGTH_SHORT).show();
                 return;
@@ -59,6 +64,7 @@ public class Tela_Problemas extends AppCompatActivity {
             String coordenadas = getIntent().getStringExtra("coordenadas");
 
             detalhes.putStringArrayListExtra("problemasSelecionados", problemasSelecionados);
+            detalhes.putExtra("data", data);
             detalhes.putExtra("local", txtLocal.getText().toString());
             detalhes.putExtra("coordenadas", coordenadas);
             startActivity(detalhes);
