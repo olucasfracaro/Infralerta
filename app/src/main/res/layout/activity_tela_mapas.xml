@@ -1,92 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:layout_height="match_parent">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--
+        PASSO 3: Barra Superior.
+        Trocamos a cor fixa por um atributo de tema que se adapta.
+    -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:layout_margin="15dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/barra_superior"> <!-- MUDANÇA AQUI: Fundo adaptativo -->
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="80dp"
+            android:id="@+id/btMenuUsuario"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/round_person_48"
+            app:fabSize="mini"
             app:tint="@color/branco"
-            app:backgroundTint="@color/purpura"
-            android:id="@+id/btMenuUsuario">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+            app:backgroundTint="@color/purpura"/>
 
+        <!--
+            Também é uma boa prática fazer a caixa de pesquisa se adaptar.
+            O '?attr/colorSurface' também funciona bem aqui.
+        -->
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="220dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
-            android:hint="Pesquise um endereco">
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:hint="Pesquise um endereço"
+            app:boxBackgroundColor="?attr/colorSurface"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
             <EditText
                 android:id="@+id/txtPesquisa"
-                android:layout_width="220dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:imeOptions="actionSearch"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/round_add_48"
-            app:tint="@color/branco"
-            app:backgroundTint="@color/purpura"
-            android:id="@+id/btMais">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="550dp"
-        android:orientation="vertical">
-        <org.osmdroid.views.MapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            app:fabCustomSize="65dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/baseline_location_on_48"
-            app:tint="@color/branco"
-            app:backgroundTint="@color/purpura"
-            android:id="@+id/btmapamapa" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btMais"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            app:fabCustomSize="65dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/baseline_email_48"
-            app:tint="@color/material_dynamic_neutral50"
-            app:backgroundTint="@color/cinza"
-            android:id="@+id/btdenunciasmapa" />
-
+            android:src="@drawable/round_add_48"
+            app:fabSize="mini"
+            app:tint="@color/branco"
+            app:backgroundTint="@color/purpura"/>
     </LinearLayout>
 
+    <!-- Barra Inferior -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btmapacentralizar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/baseline_location_on_48"
+                app:backgroundTint="@color/purpura"
+                app:fabCustomSize="66dp"
+                app:tint="@color/branco" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btdenunciasmapa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/baseline_email_48"
+                app:fabCustomSize="66dp"
+                app:backgroundTint="?attr/colorSecondaryContainer"
+                app:tint="?attr/colorOnSecondaryContainer" />
+
+        </LinearLayout>
+    </FrameLayout>
+</RelativeLayout>

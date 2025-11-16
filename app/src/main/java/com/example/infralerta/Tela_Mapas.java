@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tela_Mapas extends AppCompatActivity {
-    FloatingActionButton btMenuUsuario, btMais, btMapaMapa, btMapaDenuncia;
+    FloatingActionButton btMenuUsuario, btMais, btMapaCentralizar, btMapaDenuncia;
     MapView map;
     IMapController controlador;
     EditText txtPesquisa;
@@ -104,7 +104,7 @@ public class Tela_Mapas extends AppCompatActivity {
 
         btMenuUsuario = findViewById(R.id.btMenuUsuario);
         btMais = findViewById(R.id.btMais);
-        btMapaMapa = findViewById(R.id.btmapamapa);
+        btMapaCentralizar = findViewById(R.id.btmapacentralizar);
         btMapaDenuncia = findViewById(R.id.btdenunciasmapa);
 
         btMenuUsuario.setOnClickListener(v -> {
@@ -130,7 +130,7 @@ public class Tela_Mapas extends AppCompatActivity {
 
         });
 
-        btMapaMapa.setOnClickListener(v -> {
+        btMapaCentralizar.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};

@@ -120,9 +120,10 @@
     android:layout_marginHorizontal="20dp"
     android:layout_gravity="center|end">
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/round_arrow_back_24"
+        app:fabCustomSize="66dp"
         app:tint="@color/branco"
         android:backgroundTint="@color/purpura"
         android:id="@+id/btvoltarsituacao">
@@ -133,10 +134,11 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/round_send_24"
         app:tint="@color/branco"
+        app:fabCustomSize="66dp"
         android:backgroundTint="@color/purpura"
         android:id="@+id/btEnvio">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>

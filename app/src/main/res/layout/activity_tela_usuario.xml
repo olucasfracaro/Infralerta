@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:src="@drawable/round_logout_48"
-            app:fabCustomSize="72dp"
+            app:fabCustomSize="66dp"
             app:tint="@color/purpura"
             app:backgroundTint="@color/azulclaro"
             android:layout_gravity="bottom|start">
@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:src="@drawable/round_edit_48"
-            app:fabCustomSize="72dp"
+            app:fabCustomSize="66dp"
             android:backgroundTint="@color/azulclaro"
             android:layout_gravity="bottom|end">
         </com.google.android.material.floatingactionbutton.FloatingActionButton>

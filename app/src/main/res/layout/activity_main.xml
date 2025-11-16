@@ -57,9 +57,9 @@
         android:orientation="horizontal"
         android:layout_gravity="end">
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            app:fabCustomSize="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabCustomSize="66dp"
             android:src="@drawable/round_arrow_forward_24"
             app:tint="@color/branco"
             app:maxImageSize="30dp"

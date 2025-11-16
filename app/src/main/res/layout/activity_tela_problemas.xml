@@ -155,6 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/round_arrow_forward_24"
+        app:fabCustomSize="66dp"
         app:tint="@color/branco"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="30dp"
