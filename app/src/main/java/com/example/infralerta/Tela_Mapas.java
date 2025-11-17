@@ -10,7 +10,10 @@ import android.location.Address;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.osmdroid.api.IMapController;
@@ -145,9 +149,8 @@ public class Tela_Mapas extends AppCompatActivity {
             }
         });
 
-        btMapaTutorial.setOnClickListener((v -> {
-            //código do tutorial aqui
-        }));
+
+        btMapaTutorial.setOnClickListener(view -> abrirtutorial());
 
         btMapaDenuncia.setOnClickListener((v -> {
             Intent Denuncia = new Intent(Tela_Mapas.this, Tela_Denuncias.class);
@@ -404,5 +407,22 @@ public class Tela_Mapas extends AppCompatActivity {
                     permissoesParaPedir.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
+    }
+
+
+    private void abrirtutorial() {
+        BottomSheetDialog sheetDialog = new BottomSheetDialog(Tela_Mapas.this);
+        View viewDialog = LayoutInflater.from(this).inflate(R.layout.activity_dialog_tutorial, null);
+        sheetDialog.setContentView(viewDialog);
+        sheetDialog.show();
+
+        Button btvoltartutorial = viewDialog.findViewById(R.id.btvoltartutorial);
+
+        btvoltartutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sheetDialog.dismiss();
+            }
+        });
     }
 }
