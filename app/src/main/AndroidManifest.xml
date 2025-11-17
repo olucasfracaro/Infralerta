@@ -34,7 +34,8 @@
             android:exported="false" />
         <activity
             android:name=".Tela_Detalhes"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Tela_Problemas"
             android:exported="false" />
