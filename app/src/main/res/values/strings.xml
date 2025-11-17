@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Infralerta</string>
     <string name="probAsfalto">Problemas com o asfalto</string>
-    <string name="probVazaEsgoto">Vazamento de Esgoto</string>
+    <string name="probVazaEsgoto">Vazamento de esgoto</string>
     <string name="probEnergiaPostes">Falta de energia (postes)</string>
     <string name="probEnergiaGeral">Falta de energia (geral)</string>
     <string name="probCalcada">Calçada danificada</string>

@@ -9,11 +9,13 @@
     android:layout_margin="10dp">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:text="Denúncias enviadas"
-        android:textSize="30sp"
-        android:gravity="center"
+        android:textSize="25sp"
         android:layout_marginBottom="10dp"/>
 
     <ScrollView
@@ -52,8 +54,8 @@
             app:fabCustomSize="66dp"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_location_on_48"
-            app:tint="@color/material_dynamic_neutral50"
-            app:backgroundTint="@color/cinza" />
+            app:tint="?attr/colorOnSecondaryContainer"
+            app:backgroundTint="?attr/colorSecondaryContainer" />
 
         <View
             android:layout_width="0dp"

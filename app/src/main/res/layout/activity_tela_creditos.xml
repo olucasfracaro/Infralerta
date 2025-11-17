@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="• Responsável por modelar as interfaces e logo do aplicativo"
+            android:text="• Responsável pelo design e aplicação da parte gráfica do aplicativo"
             android:textSize="15sp"
             />
 
@@ -97,7 +97,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Agradecimentos"
             android:textAlignment="center"
             android:textSize="25sp"
@@ -107,13 +107,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Queremos agradecer primeiramente aos nossos tutores desse ano (Lúcio Luzetti e Victor Indalécio) por seus ensinamentos valiosos sobre Programação Android e Programação Orientada a Objetos."
+            android:text="Agradecemos aos nossos tutores desse ano (Lúcio Luzetti e Victor Indalécio) por seus ensinamentos valiosos sobre Android e Programação Orientada a Objetos."
             android:textSize="17sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="Também devemos agradecimentos aos nossos professores passados (Paulo Procópio e Nelson Luzetti) por nos ensinarem sobre SQL e programação básica."
             android:textSize="17sp"/>
 

@@ -416,7 +416,7 @@ public class Tela_Mapas extends AppCompatActivity {
         sheetDialog.setContentView(viewDialog);
         sheetDialog.show();
 
-        Button btvoltartutorial = viewDialog.findViewById(R.id.btvoltartutorial);
+        FloatingActionButton btvoltartutorial = viewDialog.findViewById(R.id.btvoltartutorial);
 
         btvoltartutorial.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,10 +10,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Dica"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp">
+
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Para inserir um marcador de forma rápida, dê um clique longo na tela aonde você deseja colocar a marcação."
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:layout_gravity="center"
-        android:layout_margin="10dp">
+        android:layout_margin="20dp">
 
     </TextView>
 
@@ -23,14 +35,17 @@
         android:orientation="horizontal"
         android:gravity="center"
         />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Voltar"
-        android:textSize="20dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btvoltartutorial"
-        android:layout_marginLeft="200dp" >
-
-    </Button>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/round_check_48"
+        app:fabCustomSize="66dp"
+        app:tint="@color/branco"
+        app:backgroundTint="@color/purpura" />
 
 </LinearLayout>

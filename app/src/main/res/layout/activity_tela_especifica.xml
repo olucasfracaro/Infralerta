@@ -9,12 +9,14 @@
 
     <TextView
         android:id="@+id/tvTitulo"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="Situação da Denúncia"
-        android:textSize="30sp" />
+        android:layout_gravity="center"
+        android:text="Situação da denúncia"
+        android:textSize="25sp" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvDenuncia"

@@ -7,20 +7,20 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="30dp"
-        android:text="Menu do Usuário"
-        android:textSize="30sp" />
+        android:text="Menu do usuário"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/tvUSUNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Nome de Usuário"
+        android:text="Nome de usuário"
         android:textStyle="bold"
         android:textSize="15sp" />
 
@@ -36,7 +36,7 @@
             android:id="@+id/txtUSUNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome do Usuário"
+            android:text="Nome de usuário"
             android:textSize="20sp" />
 
         <com.google.android.material.textfield.TextInputLayout

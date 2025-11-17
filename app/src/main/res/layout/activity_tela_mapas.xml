@@ -98,7 +98,7 @@
                 android:src="@drawable/round_info_24"
                 app:fabCustomSize="66dp"
                 app:backgroundTint="?attr/colorSecondaryContainer"
-                app:tint="@color/purpura" />
+                app:tint="?attr/colorOnSecondaryContainer" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
