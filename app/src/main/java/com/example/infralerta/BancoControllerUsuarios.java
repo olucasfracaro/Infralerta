@@ -68,7 +68,7 @@ public class BancoControllerUsuarios {
 
         try (SQLiteDatabase db = bancoHelper.getWritableDatabase()) {
             ContentValues valores = new ContentValues();
-            // Adiciona ao update apenas os valores que não são nulos.
+            //adiciona ao update apenas os valores que não são nulos.
             if (nome != null) valores.put(COLUNA_NOME, nome);
             if (email != null) valores.put(COLUNA_EMAIL, email);
             if (senhaHash != null) valores.put(COLUNA_SENHA, senhaHash);

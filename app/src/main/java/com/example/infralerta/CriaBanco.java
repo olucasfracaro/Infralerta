@@ -12,8 +12,9 @@ public class CriaBanco extends SQLiteOpenHelper {
     * VERSAO 3: Atualização das Denúncias
     * VERSAO 4: Hashing das senhas
     * VERSAO 5: Registro de data
+    * VERSAO 6: Caminho de imagem
     */
-    private static final int VERSAO = 5;
+    private static final int VERSAO = 6;
     public CriaBanco(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
     }
@@ -36,6 +37,7 @@ public class CriaBanco extends SQLiteOpenHelper {
                 + "coordenadas text,"
                 + "problemas text,"
                 + "descricao text,"
+                + "caminho_imagem text,"
                 + "FOREIGN KEY(user_id) REFERENCES usuarios(user_id))";
         db.execSQL(sql);
 

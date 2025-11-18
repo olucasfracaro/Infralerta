@@ -49,7 +49,7 @@ public class Tela_Login extends AppCompatActivity {
     }
 
     private void verificarDados() {
-        String email = txtEmailLogin.getText().toString().trim(); // .trim() remove espaços extras
+        String email = txtEmailLogin.getText().toString().trim(); //remove espaços extras
         String senhaInserida = txtSenhaLogin.getText().toString();
 
         if (email.isEmpty() || senhaInserida.isEmpty()) {

@@ -83,15 +83,14 @@ public class Tela_Usuario extends AppCompatActivity {
             salvarAlteracoes(bd, userId);
         });
 
-        // Carrega os dados do usuário e atualiza a UI
+        //carrega os dados do usuário e atualiza a UI
         if (userId != -1) {
             carregarDados(bd, userId);
         } else {
             Toast.makeText(this, "Erro: Usuário não autenticado.", Toast.LENGTH_LONG).show();
-            logout(); // Se não há ID, desloga por segurança
+            logout(); //se não há ID, desloga por segurança
         }
 
-        // Garante que a tela inicie no modo de leitura
         trocarModoExibicao();
     }
 
@@ -102,7 +101,6 @@ public class Tela_Usuario extends AppCompatActivity {
                 this.email = dados.getString(dados.getColumnIndexOrThrow("email"));
                 this.cpf = dados.getString(dados.getColumnIndexOrThrow("cpf"));
 
-                // Atualiza os TextViews do modo leitura
                 txtUSUNome.setText(this.nome);
                 txtUSUEmail.setText(this.email);
                 txtUSUCPF.setText(this.cpf);

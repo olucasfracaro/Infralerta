@@ -9,4 +9,5 @@
     <string name="probSemaforo">Problema de semáforo</string>
     <string name="probSinalizacaoRua">Falta de sinalização na rua</string>
     <string name="probOutro">Outro (detalhamento a seguir)</string>
+    <string name="txtImgDenuncia">Imagem da denúncia</string>
 </resources>
