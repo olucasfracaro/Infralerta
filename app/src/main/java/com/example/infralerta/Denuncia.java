@@ -1,9 +1,30 @@
 package com.example.infralerta;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Denuncia {
-    private final int denunciaId;
+    @SerializedName("denuncia_id")
+    private final Integer denunciaId;
+
+    @SerializedName("user_id")
     private final int userId;
-    private final String data, endereco, coordenadas, problemas, descricao;
+
+    @SerializedName("data")
+    private final String data;
+
+    @SerializedName("endereco")
+    private final String endereco;
+
+    @SerializedName("coordenadas")
+    private final String coordenadas;
+
+    @SerializedName("problemas")
+    private final String problemas;
+
+    @SerializedName("descricao")
+    private final String descricao;
+
+    @SerializedName("caminho_imagem")
     private String caminhoImagem;
 
     public int getDenunciaId() { return denunciaId; }

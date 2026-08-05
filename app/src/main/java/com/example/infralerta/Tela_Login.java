@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -10,11 +9,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.List;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tela_Login extends AppCompatActivity {
     Button btLogin;
@@ -49,7 +53,7 @@ public class Tela_Login extends AppCompatActivity {
     }
 
     private void verificarDados() {
-        String email = txtEmailLogin.getText().toString().trim(); //remove espaços extras
+        String email = txtEmailLogin.getText().toString().trim();
         String senhaInserida = txtSenhaLogin.getText().toString();
 
         if (email.isEmpty() || senhaInserida.isEmpty()) {
@@ -61,48 +65,44 @@ public class Tela_Login extends AppCompatActivity {
             return;
         }
 
-        BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
-        //gera o hash da senha que o usuário inseriu
         String senhaInseridaHash = Tela_Cadastro.sha256(senhaInserida);
 
-        //faz a consulta no banco de dados
-        try (Cursor dados = bd.carregarDadosLogin(email, senhaInseridaHash)) {
+        SupabaseApi api = SupabaseClient.getApi();
+        api.getUsuarioLogin(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + email, "eq." + senhaInseridaHash)
+                .enqueue(new Callback<List<Usuario>>() {
+                    @Override
+                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            //sucesso no login
+                            Usuario usuario = response.body().get(0);
+                            Integer user_id = usuario.getUserId();
 
-            //verifica se a consulta retornou dados e se os dados conferem
-            if (dados != null && dados.moveToFirst()) {
-                //LOGIN SUCEDIDO!
+                            //user_id nas prefs
+                            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            if (user_id != null) {
+                                editor.putInt("user_id", user_id);
+                            }
+                            editor.apply();
 
-                //pega o user_id da consulta
-                int columnIndex = dados.getColumnIndex("user_id");
-                if (columnIndex != -1) {
-                    int user_id = dados.getInt(columnIndex);
+                            txtEmailLogin.setText("");
+                            txtSenhaLogin.setText("");
+                            Intent it = new Intent(Tela_Login.this, Tela_Mapas.class);
+                            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(it);
+                            finish();
+                        } else {
+                            //login falhou/usuário não encontrado
+                            Toast.makeText(Tela_Login.this, "Usuário ou senha inválidos.", Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                    //salva o user_id nas prefs
-                    SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putInt("user_id", user_id);
-                    editor.apply();
-
-                    txtEmailLogin.setText("");
-                    txtSenhaLogin.setText("");
-                    Intent it = new Intent(Tela_Login.this, Tela_Mapas.class);
-                    it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(it);
-
-                } else {
-                    //coluna 'user_id' não foi encontrada na consulta
-                    Toast.makeText(this, "Erro crítico: coluna de usuário não encontrada.", Toast.LENGTH_SHORT).show();
-                }
-
-            } else {
-                //login falho
-                Toast.makeText(this, "Usuário ou senha inválidos.", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            //qualquer outra exceção que possa ocorrer
-            Toast.makeText(this, "Ocorreu um erro durante o login.", Toast.LENGTH_SHORT).show();
-            Log.e("Tela_Login", "Erro ao verificar dados de login", e);
-        }
+                    @Override
+                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                        Toast.makeText(Tela_Login.this, "Erro de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Tela_Login", "Erro ao verificar dados de login", t);
+                    }
+                });
     }
 
 }

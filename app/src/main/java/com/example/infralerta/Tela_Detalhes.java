@@ -30,6 +30,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Tela_Detalhes extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     MaterialCardView mcvImagem, mcvBtSel;
@@ -92,35 +99,90 @@ public class Tela_Detalhes extends AppCompatActivity {
         btVoltarDetalhe.setOnClickListener(v -> finish());
 
         btEnviar.setOnClickListener(v -> {
-            //salva a imagem, se houver uma para salvar
+            //salva localmente para garantir o arquivo
             if (bitmapParaSalvar != null) {
                 salvarImagemComprimida(bitmapParaSalvar);
                 bitmapParaSalvar = null;
             }
 
             SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
-            BancoControllerDenuncias bd = new BancoControllerDenuncias(getBaseContext());
-
             int userId = prefs.getInt("user_id", -1);
 
             String problemasStr = problemasParaString(problemas);
             String descricao = txtDetalhamento.getText().toString();
 
-            //cria o objeto Denuncia com os dados corretos
             Denuncia novaDenuncia = new Denuncia(userId, data, local, coordenadas, problemasStr, descricao);
-            novaDenuncia.setCaminhoImagem(caminhoImagemSalva); //caminhoImagemSalva é preenchido por salvarImagemComprimida
+            novaDenuncia.setCaminhoImagem(caminhoImagemSalva); //inicialmente o caminho local
 
-            if (bd.criarDenuncia(novaDenuncia)) {
-                Toast.makeText(getBaseContext(), "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
-                Intent it = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
-                it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(it);
-            } else {
-                Toast.makeText(this, "Falha ao criar denúncia.", Toast.LENGTH_SHORT).show();
+            //inicia o processo de envio (Upload -> Banco)
+            enviarDenunciaCompleta(novaDenuncia);
+        });
+    }
+
+    private void enviarDenunciaCompleta(Denuncia denuncia) {
+        if (caminhoImagemSalva != null) {
+            File arquivoImagem = new File(caminhoImagemSalva);
+            uploadImagemParaSupabase(denuncia, arquivoImagem);
+        } else {
+            //se não tem imagem, salva direto no Supabase
+            salvarNoSupabase(denuncia);
+        }
+    }
+
+    private void uploadImagemParaSupabase(Denuncia denuncia, File arquivo) {
+        RequestBody requestBody = RequestBody.create(arquivo, MediaType.parse("image/jpeg"));
+        String nomeArquivoNoServidor = arquivo.getName();
+
+        SupabaseClient.getApi().uploadImagem(
+                SupabaseClient.ANON_KEY,
+                "Bearer " + SupabaseClient.ANON_KEY,
+                "image/jpeg",
+                nomeArquivoNoServidor,
+                requestBody
+        ).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    String urlPublica = SupabaseClient.BASE_URL + "/storage/v1/object/public/imagens_denuncias/" + nomeArquivoNoServidor;
+                    denuncia.setCaminhoImagem(urlPublica);
+                    salvarNoSupabase(denuncia);
+                } else {
+                    Toast.makeText(Tela_Detalhes.this, "Erro no upload da imagem: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(Tela_Detalhes.this, "Falha na rede ao subir imagem", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private void salvarNoSupabase(Denuncia denuncia) {
+        SupabaseClient.getApi().insertDenuncia(
+                SupabaseClient.ANON_KEY,
+                "Bearer " + SupabaseClient.ANON_KEY,
+                denuncia
+        ).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(Tela_Detalhes.this, "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
+                    Intent it = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(it);
+                    finish();
+                } else {
+                    Toast.makeText(Tela_Detalhes.this, "Erro ao salvar no Supabase: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(Tela_Detalhes.this, "Falha na conexão com Supabase", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -178,7 +240,7 @@ public class Tela_Detalhes extends AppCompatActivity {
 
 
     public static Bitmap rotacionarBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix(); // Usa android.graphics.Matrix
+        Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }

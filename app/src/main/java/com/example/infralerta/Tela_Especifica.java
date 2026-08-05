@@ -10,6 +10,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +21,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
-import java.io.File;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tela_Especifica extends AppCompatActivity {
     ImageView imgDenuncia;
@@ -37,10 +43,6 @@ public class Tela_Especifica extends AppCompatActivity {
             return insets;
         });
 
-        SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
-        int userId = prefs.getInt("user_id", -1);
-        BancoControllerDenuncias bd = new BancoControllerDenuncias(getBaseContext());
-
         imgDenuncia = findViewById(R.id.imgDenuncia);
 
         txtLocal = findViewById(R.id.txtLocal);
@@ -54,21 +56,47 @@ public class Tela_Especifica extends AppCompatActivity {
         Intent it = getIntent();
         int denunciaId = it.getIntExtra("denuncia_id", -1);
 
-        Denuncia denuncia = bd.buscarDenunciaPorId(userId, denunciaId);
+        if (denunciaId != -1) {
+            buscarDetalhesSupabase(denunciaId);
+        }
+    }
 
-        //verifica se a denúncia possui um caminho de imagem válido
+    private void buscarDetalhesSupabase(int denunciaId) {
+        SupabaseApi api = SupabaseClient.getApi();
+        api.getDenunciaPorId(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + denunciaId)
+                .enqueue(new Callback<List<Denuncia>>() {
+                    @Override
+                    public void onResponse(Call<List<Denuncia>> call, Response<List<Denuncia>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            Denuncia denuncia = response.body().get(0);
+                            exibirDados(denuncia);
+                        } else {
+                            Toast.makeText(Tela_Especifica.this, "Erro ao carregar detalhes.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Denuncia>> call, Throwable t) {
+                        Toast.makeText(Tela_Especifica.this, "Falha na conexão.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void exibirDados(Denuncia denuncia) {
         String caminhoImagem = denuncia.getCaminhoImagem();
         if (caminhoImagem != null && !caminhoImagem.isEmpty()) {
-            File imgFile = new File(caminhoImagem);
-
-            if (imgFile.exists()) {
-                //converte o arquivo de imagem em um Bitmap
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-                imgDenuncia.setImageBitmap(myBitmap);
+            if (caminhoImagem.startsWith("http")) {
+                //carrega imagem da URL usando Picasso
+                Picasso.get().load(caminhoImagem).into(imgDenuncia);
+            } else {
+                //caso ainda existam caminhos locais (legado)
+                File imgFile = new File(caminhoImagem);
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imgDenuncia.setImageBitmap(myBitmap);
+                }
             }
         } else {
-            //cculta o ImageView se não houver imagem (?)
             imgDenuncia.setVisibility(View.GONE);
         }
 

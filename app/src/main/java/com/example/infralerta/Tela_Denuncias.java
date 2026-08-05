@@ -18,6 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tela_Denuncias extends AppCompatActivity {
     LinearLayout llDenuncias;
@@ -39,36 +44,50 @@ public class Tela_Denuncias extends AppCompatActivity {
         llDenuncias = findViewById(R.id.llDenuncias);
 
         SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
-        int userId = prefs.getInt("user_id", -1); //pega o user_id, caso não exista, será -1
-        BancoControllerDenuncias bd = new BancoControllerDenuncias(getBaseContext());
+        int userId = prefs.getInt("user_id", -1);
 
-        ArrayList<Integer> denunciasIds = bd.buscarDenunciasPorUserId(userId);
-        ArrayList<Denuncia> denunciasAlfabetica = new ArrayList<>();
-
-        for (int denunciaId : denunciasIds) {
-            Denuncia denuncia = bd.buscarDenunciaPorId(userId, denunciaId);
-            denunciasAlfabetica.add(denuncia);
+        if (userId != -1) {
+            carregarDenunciasSupabase(userId);
         }
+    }
 
-        //ordenar pelo endereço
-        denunciasAlfabetica.sort(Comparator.comparing(Denuncia::getEndereco, String.CASE_INSENSITIVE_ORDER));
+    private void carregarDenunciasSupabase(int userId) {
+        SupabaseApi api = SupabaseClient.getApi();
+        api.getDenunciasPorUsuario(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + userId)
+                .enqueue(new Callback<List<Denuncia>>() {
+                    @Override
+                    public void onResponse(Call<List<Denuncia>> call, Response<List<Denuncia>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            ArrayList<Denuncia> denuncias = new ArrayList<>(response.body());
+                            exibirDenuncias(denuncias);
+                        }
+                    }
 
-        for (Denuncia denuncia : denunciasAlfabetica) {
+                    @Override
+                    public void onFailure(Call<List<Denuncia>> call, Throwable t) {
+                        // Tratar erro
+                    }
+                });
+    }
+
+    private void exibirDenuncias(ArrayList<Denuncia> denuncias) {
+        denuncias.sort(Comparator.comparing(Denuncia::getEndereco, String.CASE_INSENSITIVE_ORDER));
+
+        llDenuncias.removeAllViews();
+
+        for (Denuncia denuncia : denuncias) {
             int denunciaId = denuncia.getDenunciaId();
             String data = denuncia.getData();
             String local = denuncia.getEndereco();
 
-            //denunciaView é o fragment inteiro
             View denunciaView = getLayoutInflater().inflate(R.layout.fragment_denuncia, null);
             TextView txtLocal = denunciaView.findViewById(R.id.txtLocal);
             TextView txtData = denunciaView.findViewById(R.id.txtData);
-            //o clDenuncia é o conteúdo do fragment
             ConstraintLayout clDenuncia = denunciaView.findViewById(R.id.clDenuncia);
 
             txtLocal.setText(local);
             txtData.setText(data);
 
-            //a denunciaView é adicionada ao LinearLayout
             llDenuncias.addView(denunciaView);
 
             clDenuncia.setOnClickListener(v -> {

@@ -74,7 +74,7 @@ public class BancoControllerUsuarios {
             if (senhaHash != null) valores.put(COLUNA_SENHA, senhaHash);
             if (cpf != null) valores.put(COLUNA_CPF, cpf);
 
-            // Prepara a cláusula WHERE de forma segura para evitar SQL Injection.
+            //prepara a cláusula WHERE de forma segura para evitar SQL Injection.
             String clausulaWhere = COLUNA_USER_ID + " = ?";
             String[] argumentosWhere = {String.valueOf(userId)};
 
@@ -82,7 +82,7 @@ public class BancoControllerUsuarios {
 
         } catch (Exception e) {
             Log.e("BancoController", "Erro ao alterar usuário", e);
-            linhasAfetadas = 0; // Sinaliza que nenhuma linha foi alterada devido ao erro.
+            linhasAfetadas = 0; //sinaliza que nenhuma linha foi alterada devido ao erro.
         }
 
         return linhasAfetadas > 0;

@@ -2,7 +2,6 @@ package com.example.infralerta;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +17,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tela_Usuario extends AppCompatActivity {
     boolean modoLeitura = true;
@@ -43,7 +48,6 @@ public class Tela_Usuario extends AppCompatActivity {
             return insets;
         });
 
-        BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
         SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
         int userId = prefs.getInt("user_id", -1);
 
@@ -80,12 +84,12 @@ public class Tela_Usuario extends AppCompatActivity {
         });
 
         fabSalvar.setOnClickListener(v -> {
-            salvarAlteracoes(bd, userId);
+            salvarAlteracoes(userId);
         });
 
         //carrega os dados do usuário e atualiza a UI
         if (userId != -1) {
-            carregarDados(bd, userId);
+            carregarDados(userId);
         } else {
             Toast.makeText(this, "Erro: Usuário não autenticado.", Toast.LENGTH_LONG).show();
             logout(); //se não há ID, desloga por segurança
@@ -94,24 +98,31 @@ public class Tela_Usuario extends AppCompatActivity {
         trocarModoExibicao();
     }
 
-    private void carregarDados(BancoControllerUsuarios bd, int userId) {
-        try (Cursor dados = bd.carregarDadosUsuario(userId)) {
-            if (dados != null && dados.moveToFirst()) {
-                this.nome = dados.getString(dados.getColumnIndexOrThrow("nome"));
-                this.email = dados.getString(dados.getColumnIndexOrThrow("email"));
-                this.cpf = dados.getString(dados.getColumnIndexOrThrow("cpf"));
+    private void carregarDados(int userId) {
+        SupabaseApi api = SupabaseClient.getApi();
+        api.getUsuarioPorId(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + userId)
+                .enqueue(new Callback<List<Usuario>>() {
+                    @Override
+                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            Usuario u = response.body().get(0);
+                            nome = u.getNome();
+                            email = u.getEmail();
+                            cpf = u.getCpf();
 
-                txtUSUNome.setText(this.nome);
-                txtUSUEmail.setText(this.email);
-                txtUSUCPF.setText(this.cpf);
+                            txtUSUNome.setText(nome);
+                            txtUSUEmail.setText(email);
+                            txtUSUCPF.setText(cpf);
+                        } else {
+                            Toast.makeText(Tela_Usuario.this, "Erro ao carregar dados do Supabase.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            } else {
-                Toast.makeText(this, "Erro ao carregar os dados do usuário.", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Ocorreu um erro ao buscar os dados.", Toast.LENGTH_SHORT).show();
-            Log.e("Tela_Usuario", "Erro ao carregar dados do banco.", e);
-        }
+                    @Override
+                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                        Toast.makeText(Tela_Usuario.this, "Falha na conexão.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void trocarModoExibicao() {
@@ -152,16 +163,15 @@ public class Tela_Usuario extends AppCompatActivity {
             tilUSUSenha.setVisibility(View.VISIBLE);
             tilUSUCPF.setVisibility(View.VISIBLE);
 
-            // Controla os botões
             fabSalvar.setVisibility(View.VISIBLE);
             fabEditar.setVisibility(View.GONE);
         }
     }
 
-    private void salvarAlteracoes(BancoControllerUsuarios bd, int userId) {
+    private void salvarAlteracoes(int userId) {
         String nomeNovo = inUSUNome.getText().toString().trim();
         String emailNovo = inUSUEmail.getText().toString().trim();
-        String senhaNova = inUSUSenha.getText().toString(); //senha em texto puro
+        String senhaNova = inUSUSenha.getText().toString();
         String cpfNovo = inUSUCPF.getText().toString();
 
         if (nomeNovo.isEmpty() || emailNovo.isEmpty() || cpfNovo.isEmpty()) {
@@ -172,42 +182,48 @@ public class Tela_Usuario extends AppCompatActivity {
             Toast.makeText(this, "Formato de e-mail inválido.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!Tela_Cadastro.verificarCPF(inUSUCPF.getText().toString())) {
+        if (!Tela_Cadastro.verificarCPF(cpfNovo)) {
             Toast.makeText(this, "CPF inválido.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         boolean nomeAlterado = !nomeNovo.equals(this.nome);
         boolean emailAlterado = !emailNovo.equals(this.email);
-        boolean senhaAlterada = !senhaNova.isEmpty(); //senha é alterada se não estiver vazia
+        boolean senhaAlterada = !senhaNova.isEmpty();
         boolean cpfAlterado = !cpfNovo.equals(this.cpf);
 
-        //se nada foi alterado, apenas volta para o modo de leitura
         if (!nomeAlterado && !emailAlterado && !senhaAlterada && !cpfAlterado) {
             modoLeitura = true;
             trocarModoExibicao();
-            //Toast.makeText(this, "Nenhuma alteração foi feita.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //prepara os dados para o update (usa null se o campo não foi alterado)
-        String nomeParaUpdate = nomeAlterado ? nomeNovo : null;
-        String emailParaUpdate = emailAlterado ? emailNovo : null;
+        // Para simplificar o objeto de atualização, vamos preencher tudo
+        // mas o ideal seria enviar apenas os campos alterados via Map.
         String senhaParaUpdate = senhaAlterada ? Tela_Cadastro.sha256(senhaNova) : null;
-        String cpfParaUpdate = cpfAlterado ? cpfNovo : null;
+        
+        Usuario usuarioUpdate = new Usuario(nomeNovo, emailNovo, senhaParaUpdate, cpfNovo);
 
-        if (bd.alterarUsuario(userId, nomeParaUpdate, emailParaUpdate, senhaParaUpdate, cpfParaUpdate)) {
-            Toast.makeText(this, "Dados alterados com sucesso!", Toast.LENGTH_SHORT).show();
+        SupabaseApi api = SupabaseClient.getApi();
+        api.updateUsuario(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + userId, usuarioUpdate)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(Tela_Usuario.this, "Dados alterados com sucesso!", Toast.LENGTH_SHORT).show();
+                            carregarDados(userId);
+                            modoLeitura = true;
+                            trocarModoExibicao();
+                        } else {
+                            Toast.makeText(Tela_Usuario.this, "Erro ao alterar os dados no Supabase.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            //recarrega os dados atualizados do banco
-            carregarDados(bd, userId);
-
-            //volta para o modo de leitura
-            modoLeitura = true;
-            trocarModoExibicao();
-        } else {
-            Toast.makeText(this, "Erro ao alterar os dados.", Toast.LENGTH_SHORT).show();
-        }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(Tela_Usuario.this, "Falha na conexão.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void logout() {

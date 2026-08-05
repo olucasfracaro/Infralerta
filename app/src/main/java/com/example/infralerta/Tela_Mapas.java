@@ -61,8 +61,9 @@ public class Tela_Mapas extends AppCompatActivity {
     private Address address;
     private ArrayList<Marker> marcadoresNoMapa = new ArrayList<>();
 
-    // obtendo o nome do pacote; é necessário para identificar o client para acessar o mapa;
-    static final String userAgent = BuildConfig.LIBRARY_PACKAGE_NAME+"/"+BuildConfig.VERSION_NAME;
+    //User-Agent único para o Geocoder e para o Mapa
+    static final String userAgent = "Infralerta/1.0 (com.example.infralerta)";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +79,8 @@ public class Tela_Mapas extends AppCompatActivity {
 
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        // Define um User-Agent único para evitar o erro 403 (Tile Usage Policy)
+        Configuration.getInstance().setUserAgentValue(getPackageName());
 
         txtPesquisa = findViewById(R.id.txtPesquisa);
         // obtendo o endereço e pesquisando quando o botão de pesquisa (ou enter) é clicado

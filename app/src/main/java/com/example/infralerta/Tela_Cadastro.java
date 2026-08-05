@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.List;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -23,6 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tela_Cadastro extends AppCompatActivity {
     Button btCADcadastro;
@@ -153,8 +157,6 @@ public class Tela_Cadastro extends AppCompatActivity {
     }
 
     public void cadastrar() {
-        BancoControllerUsuarios bd = new BancoControllerUsuarios(getBaseContext());
-
         String txtNome = txtCADNome.getText().toString().trim();
         String txtEmail = txtCADEmail.getText().toString().trim();
         String txtSenha = txtCADSenha.getText().toString();
@@ -172,37 +174,51 @@ public class Tela_Cadastro extends AppCompatActivity {
             Toast.makeText(this, "Insira um CPF válido!", Toast.LENGTH_LONG).show();
             return;
         }
-        if (bd.verificarUsuarioExistente(txtEmail, txtCPF)) {
-            Toast.makeText(this, "O Email ou CPF já pertencem a um usuário cadastrado.", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         String txtSenhaHash = sha256(txtSenha);
 
-        if (bd.criarUsuario(txtNome, txtEmail, txtSenhaHash, txtCPF)) {
-            Toast.makeText(this, "Usuário cadastrado com sucesso.", Toast.LENGTH_LONG).show();
+        Usuario novoUsuario = new Usuario(txtNome, txtEmail, txtSenhaHash, txtCPF);
 
-            int userId = bd.buscarUserId(txtEmail, txtCPF);
+        SupabaseApi api = SupabaseClient.getApi();
+        api.insertUsuario(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, novoUsuario)
+                .enqueue(new Callback<List<Usuario>>() {
+                    @Override
+                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            Usuario usuarioCriado = response.body().get(0);
+                            Integer userId = usuarioCriado.getUserId();
 
-            //garante que o usuário foi encontrado antes de prosseguir
-            if (userId != -1) {
-                SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("user_id", userId);
-                editor.apply();
+                            Toast.makeText(Tela_Cadastro.this, "Usuário cadastrado com sucesso.", Toast.LENGTH_LONG).show();
 
-                Intent it = new Intent(Tela_Cadastro.this, Tela_Mapas.class);
-                //limpa as telas anteriores para que o usuário não volte para a tela de cadastro
-                it.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(it);
-                finish();
-            } else {
-                Toast.makeText(this, "Erro ao fazer login após o cadastro.", Toast.LENGTH_LONG).show();
-            }
+                            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            if (userId != null) {
+                                editor.putInt("user_id", userId);
+                            }
+                            editor.apply();
 
-        } else {
-            Toast.makeText(this, "Erro: E-mail ou CPF já pode estar cadastrado.", Toast.LENGTH_LONG).show();
-        }
+                            Intent it = new Intent(Tela_Cadastro.this, Tela_Mapas.class);
+                            it.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(it);
+                            finish();
+                        } else {
+                            String errorMsg = "Erro ao cadastrar: " + response.code();
+                            try {
+                                if (response.errorBody() != null) {
+                                    errorMsg += " - " + response.errorBody().string();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(Tela_Cadastro.this, errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                        Toast.makeText(Tela_Cadastro.this, "Erro de conexão: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public static String sha256(String input) {
