@@ -9,13 +9,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,7 +30,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.BuildConfig;
 import org.osmdroid.bonuspack.location.GeocoderNominatim;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.GeoPoint;
@@ -61,14 +58,27 @@ public class Tela_Mapas extends AppCompatActivity {
     private Address address;
     private ArrayList<Marker> marcadoresNoMapa = new ArrayList<>();
 
-    //User-Agent único para o Geocoder e para o Mapa
-    static final String userAgent = "Infralerta/1.0 (com.example.infralerta)";
+    //User-Agent ÚNICO e MUITO ESPECÍFICO para evitar bloqueios do OSM
+    private static final String USER_AGENT = "InfralertaApp/1.0 (Android; contact: lucas.infralerta.dev@gmail.com)";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Configuração do OSM deve vir ANTES do super.onCreate e setContentView
+        Context ctx = getApplicationContext();
+        
+        // Força o User-Agent nas SharedPreferences e na Configuração
+        SharedPreferences osmPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        osmPrefs.edit().putString("osmdroid.useragent", USER_AGENT).apply();
+        
+        Configuration.getInstance().load(ctx, osmPrefs);
+        Configuration.getInstance().setUserAgentValue(USER_AGENT);
+        Configuration.getInstance().getAdditionalHttpRequestProperties().clear();
+        Configuration.getInstance().getAdditionalHttpRequestProperties().put("User-Agent", USER_AGENT);
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_tela_mapas);
+        
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -77,22 +87,14 @@ public class Tela_Mapas extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
 
-        Context ctx = getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        // Define um User-Agent único para evitar o erro 403 (Tile Usage Policy)
-        Configuration.getInstance().setUserAgentValue(getPackageName());
-
         txtPesquisa = findViewById(R.id.txtPesquisa);
         // obtendo o endereço e pesquisando quando o botão de pesquisa (ou enter) é clicado
-        txtPesquisa.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    pesquisarEndereco();
-                    return true;
-                }
-                return false;
+        txtPesquisa.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                pesquisarEndereco();
+                return true;
             }
+            return false;
         });
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -232,7 +234,7 @@ public class Tela_Mapas extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                GeocoderNominatim geocoder = new GeocoderNominatim(userAgent);
+                GeocoderNominatim geocoder = new GeocoderNominatim(USER_AGENT);
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(endereco,1);
                     if (addressList != null && !addressList.isEmpty()) {
@@ -338,7 +340,7 @@ public class Tela_Mapas extends AppCompatActivity {
      */
     private void buscarEnderecoPorCoordenadas(GeoPoint p) {
         new Thread(() -> {
-            GeocoderNominatim geocoder = new GeocoderNominatim(userAgent);
+            GeocoderNominatim geocoder = new GeocoderNominatim(USER_AGENT);
             String nomeEndereco = "";
             try {
                 //geocodificação reversa feita com getFromLocation
