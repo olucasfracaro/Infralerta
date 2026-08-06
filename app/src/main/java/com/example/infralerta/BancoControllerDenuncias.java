@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller responsável por todas as operações de banco de dados
@@ -34,23 +35,92 @@ public class BancoControllerDenuncias {
     }
 
     /**
-     * Cria uma nova denúncia no banco de dados.
-     * @param denuncia O objeto Denuncia contendo todos os dados a serem inseridos.
-     * @return {@code true} se a inserção for bem-sucedida, {@code false} caso contrário.
+     * Sincroniza uma lista de denúncias vindas do Supabase com o cache local.
+     * Realiza um 'upsert': insere se não existir, atualiza se já existir.
+     * Também remove do cache local as denúncias que não existem mais no Supabase.
      */
-    public boolean criarDenuncia(Denuncia denuncia) {
-        long resultado;
+    public void sincronizarCache(int userId, List<Denuncia> denuncias) {
+        try (SQLiteDatabase db = bancoHelper.getWritableDatabase()) {
+            db.beginTransaction();
+            try {
+                StringBuilder idsPermanecer = new StringBuilder();
+                for (int i = 0; i < denuncias.size(); i++) {
+                    idsPermanecer.append(denuncias.get(i).getDenunciaId());
+                    if (i < denuncias.size() - 1) idsPermanecer.append(",");
+                }
 
+                String clausulaDelete = COLUNA_ID_USUARIO + " = ?";
+                if (idsPermanecer.length() > 0) {
+                    clausulaDelete += " AND " + COLUNA_ID_DENUNCIA + " NOT IN (" + idsPermanecer + ")";
+                }
+                db.delete(TABELA_DENUNCIAS, clausulaDelete, new String[]{String.valueOf(userId)});
+
+                for (Denuncia d : denuncias) {
+                    ContentValues valores = getValores(d);
+                    valores.put(COLUNA_ID_DENUNCIA, d.getDenunciaId());
+
+                    int rows = db.update(TABELA_DENUNCIAS, valores, COLUNA_ID_DENUNCIA + " = ?", new String[]{String.valueOf(d.getDenunciaId())});
+                    if (rows == 0) {
+                        db.insert(TABELA_DENUNCIAS, null, valores);
+                    }
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        } catch (Exception e) {
+            Log.e("BancoController", "Erro ao sincronizar cache de denúncias", e);
+        }
+    }
+
+    /**
+     * Cria uma nova denúncia no banco de dados.
+     *
+     * @param denuncia O objeto Denuncia contendo todos os dados a serem inseridos.
+     */
+    public void criarDenuncia(Denuncia denuncia) {
         try (SQLiteDatabase db = bancoHelper.getWritableDatabase()) {
             ContentValues valores = getValores(denuncia);
+            if (denuncia.getDenunciaId() != 0) {
+                valores.put(COLUNA_ID_DENUNCIA, denuncia.getDenunciaId());
+            }
 
-            resultado = db.insert(TABELA_DENUNCIAS, null, valores);
+            db.insertWithOnConflict(TABELA_DENUNCIAS, null, valores, SQLiteDatabase.CONFLICT_REPLACE);
         } catch (Exception e) {
-            Log.e("BancoController", "Erro ao criar denúncia", e);
-            resultado = -1; //erro
+            Log.e("BancoController", "Erro ao criar denúncia no cache", e);
         }
+    }
 
-        return resultado != -1;
+    /**
+     * Busca todas as denúncias de um usuário no cache local.
+     */
+    public ArrayList<Denuncia> buscarTodasDenunciasCache(int userId) {
+        ArrayList<Denuncia> lista = new ArrayList<>();
+        String clausulaWhere = COLUNA_ID_USUARIO + " = ?";
+        String[] argumentosWhere = {String.valueOf(userId)};
+
+        try (SQLiteDatabase db = bancoHelper.getReadableDatabase();
+             Cursor cursor = db.query(TABELA_DENUNCIAS, null, clausulaWhere, argumentosWhere, null, null, COLUNA_ID_DENUNCIA + " DESC")) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUNA_ID_DENUNCIA));
+                    String data = cursor.getString(cursor.getColumnIndexOrThrow(COLUNA_DATA));
+                    String endereco = cursor.getString(cursor.getColumnIndexOrThrow(COLUNA_ENDERECO));
+                    String coordenadas = cursor.getString(cursor.getColumnIndexOrThrow(COLUNA_COORDENADAS));
+                    String problemas = cursor.getString(cursor.getColumnIndexOrThrow(COLUNA_PROBLEMAS));
+                    String descricao = cursor.getString(cursor.getColumnIndexOrThrow(COLUNA_DESCRICAO));
+                    String img = cursor.getString(cursor.getColumnIndexOrThrow(COLUNA_CAMINHO_IMAGEM));
+
+                    Denuncia d = new Denuncia(id, userId, data, endereco, coordenadas, problemas, descricao);
+                    d.setCaminhoImagem(img);
+                    lista.add(d);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("BancoController", "Erro ao buscar denúncias do cache", e);
+        }
+        return lista;
     }
 
     /**

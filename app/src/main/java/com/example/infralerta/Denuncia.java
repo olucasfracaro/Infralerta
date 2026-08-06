@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Denuncia {
     @SerializedName("denuncia_id")
-    private final Integer denunciaId;
+    private Integer denunciaId;
 
     @SerializedName("user_id")
     private final int userId;
@@ -50,9 +50,9 @@ public class Denuncia {
     }
 
 
-    //construtor pra criar uma denúncia nova (denunciaId é gerado pelo banco, então pode ser 0)
+    //construtor pra criar uma denúncia nova (denunciaId é nulo para o banco gerar automaticamente)
     public Denuncia(int userId, String data, String endereco, String coordenadas, String problemas, String descricao) {
-        this.denunciaId = 0; //ID zerado pois será gerado pelo banco na inserção
+        this.denunciaId = null;
         this.userId = userId;
         this.data = data;
         this.endereco = endereco;

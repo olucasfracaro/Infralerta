@@ -65,7 +65,6 @@ public class Tela_Cadastro extends AppCompatActivity {
     public static TextWatcher cpfWatcher() {
         return new TextWatcher() {
             private boolean estaAtualizando = false;
-            private final String mascara = "###.###.###-##";
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,6 +87,7 @@ public class Tela_Cadastro extends AppCompatActivity {
                 StringBuilder textoMascarado = new StringBuilder();
 
                 int i = 0;
+                String mascara = "###.###.###-##";
                 for (char m : mascara.toCharArray()) {
                     if (m != '#' && i < somenteDigitos.length()) {
                         textoMascarado.append(m);
@@ -183,10 +183,13 @@ public class Tela_Cadastro extends AppCompatActivity {
         api.insertUsuario(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, novoUsuario)
                 .enqueue(new Callback<List<Usuario>>() {
                     @Override
-                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                    public void onResponse(@NonNull Call<List<Usuario>> call, @NonNull Response<List<Usuario>> response) {
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                             Usuario usuarioCriado = response.body().get(0);
                             Integer userId = usuarioCriado.getUserId();
+
+                            BancoControllerUsuarios bd = new BancoControllerUsuarios(Tela_Cadastro.this);
+                            bd.salvarUsuarioLocal(usuarioCriado);
 
                             Toast.makeText(Tela_Cadastro.this, "Usuário cadastrado com sucesso.", Toast.LENGTH_LONG).show();
 
@@ -215,7 +218,7 @@ public class Tela_Cadastro extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                    public void onFailure(@NonNull Call<List<Usuario>> call, @NonNull Throwable t) {
                         Toast.makeText(Tela_Cadastro.this, "Erro de conexão: " + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

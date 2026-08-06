@@ -87,6 +87,7 @@ public interface SupabaseApi {
             @Header("apikey") String apiKey,
             @Header("Authorization") String token,
             @Header("Content-Type") String contentType,
+            @Header("x-upsert") String upsert,
             @Path("path") String fileName,
             @Body RequestBody file
     );

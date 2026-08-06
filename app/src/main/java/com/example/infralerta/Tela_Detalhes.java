@@ -1,8 +1,15 @@
 package com.example.infralerta;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.graphics.Matrix;
@@ -11,6 +18,8 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +37,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -39,13 +51,15 @@ import retrofit2.Response;
 
 public class Tela_Detalhes extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
+    private static final int TAKE_PHOTO = 101;
+    private static final int CAMERA_PERMISSION_CODE = 102;
     MaterialCardView mcvImagem, mcvBtSel;
     Button btImagem;
     FloatingActionButton btVoltarDetalhe, btEnviar;
     TextView txtlocalselecionado;
     EditText txtDetalhamento;
     ImageView imgDenuncia;
-    Uri imageUri;
+    Uri imageUri, photoUri;
     String localselecionado;
     String caminhoImagemSalva = null;
     LinearLayout layoutproblemas;
@@ -91,10 +105,7 @@ public class Tela_Detalhes extends AppCompatActivity {
             }
         }
 
-        btImagem.setOnClickListener(v -> {
-            Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(gallery, PICK_IMAGE);
-        });
+        btImagem.setOnClickListener(v -> mostrarOpcoesImagem());
 
         btVoltarDetalhe.setOnClickListener(v -> finish());
 
@@ -108,6 +119,7 @@ public class Tela_Detalhes extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
             int userId = prefs.getInt("user_id", -1);
 
+            assert problemas != null;
             String problemasStr = problemasParaString(problemas);
             String descricao = txtDetalhamento.getText().toString();
 
@@ -137,12 +149,14 @@ public class Tela_Detalhes extends AppCompatActivity {
                 SupabaseClient.ANON_KEY,
                 "Bearer " + SupabaseClient.ANON_KEY,
                 "image/jpeg",
+                "true", // x-upsert: true
                 nomeArquivoNoServidor,
                 requestBody
         ).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                //se for sucesso (200/201) ou conflito (409 - imagem já existe), prosseguimos
+                if (response.isSuccessful() || response.code() == 409) {
                     String urlPublica = SupabaseClient.BASE_URL + "/storage/v1/object/public/imagens_denuncias/" + nomeArquivoNoServidor;
                     denuncia.setCaminhoImagem(urlPublica);
                     salvarNoSupabase(denuncia);
@@ -152,7 +166,7 @@ public class Tela_Detalhes extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(Tela_Detalhes.this, "Falha na rede ao subir imagem", Toast.LENGTH_SHORT).show();
             }
         });
@@ -165,8 +179,11 @@ public class Tela_Detalhes extends AppCompatActivity {
                 denuncia
         ).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
+                    BancoControllerDenuncias bd = new BancoControllerDenuncias(Tela_Detalhes.this);
+                    bd.criarDenuncia(denuncia);
+
                     Toast.makeText(Tela_Detalhes.this, "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
                     it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -178,52 +195,141 @@ public class Tela_Detalhes extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 Toast.makeText(Tela_Detalhes.this, "Falha na conexão com Supabase", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
-            if (data != null && data.getData() != null) {
-                imageUri = data.getData();
-
-                try {
-                    //carrega o bitmap original
-                    Bitmap bitmapOriginal = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-
-                    //corrige a rotação da imagem usando os dados EXIF
-                    Bitmap bitmapRotacionado = rotacionarImagemSeNecessario(bitmapOriginal, imageUri);
-
-                    //redimensiona o bitmap rotacionado
-                    Bitmap bitmapRedimensionado = redimensionarBitmap(bitmapRotacionado, 1080);
-
-                    mcvImagem.setVisibility(View.VISIBLE);
-                    imgDenuncia.setImageBitmap(bitmapRedimensionado);
-
-                    bitmapParaSalvar = bitmapRedimensionado;
-
-                    //libera a memória dos bitmaps intermediários
-                    if (bitmapOriginal != bitmapRotacionado) {
-                        bitmapOriginal.recycle();
-                    }
-                    if (bitmapRotacionado != bitmapRedimensionado) {
-                        bitmapRotacionado.recycle();
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "Falha ao carregar a imagem.", Toast.LENGTH_SHORT).show();
+    private void mostrarOpcoesImagem() {
+        String[] opcoes = {"Câmera", "Galeria"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecione a origem da imagem");
+        builder.setItems(opcoes, (dialog, which) -> {
+            if (which == 0) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                } else {
+                    abrirCamera();
                 }
+            } else {
+                abrirGaleria();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                abrirCamera();
+            } else {
+                Toast.makeText(this, "Permissão da câmera é necessária para tirar fotos.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    private void abrirGaleria() {
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    private void abrirCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = criarArquivoImagemTemporario();
+            } catch (IOException ex) {
+                Toast.makeText(this, "Erro ao criar arquivo de imagem", Toast.LENGTH_SHORT).show();
+            }
+            if (photoFile != null) {
+                photoUri = FileProvider.getUriForFile(this,
+                        "com.example.infralerta.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File criarArquivoImagemTemporario() throws IOException {
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir("Pictures");
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Uri uriSelecionada = null;
+            if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+                uriSelecionada = data.getData();
+            } else if (requestCode == TAKE_PHOTO) {
+                uriSelecionada = photoUri;
+            }
+
+            if (uriSelecionada != null) {
+                processarImagem(uriSelecionada);
+            }
+        }
+    }
+
+    private void processarImagem(Uri uri) {
+        imageUri = uri;
+        try {
+            Bitmap bitmapOriginal = carregarBitmapOtimizado(uri);
+            Bitmap bitmapRotacionado = rotacionarImagemSeNecessario(bitmapOriginal, uri);
+            Bitmap bitmapRedimensionado = redimensionarBitmap(bitmapRotacionado);
+
+            mcvImagem.setVisibility(View.VISIBLE);
+            imgDenuncia.setImageBitmap(bitmapRedimensionado);
+            bitmapParaSalvar = bitmapRedimensionado;
+
+            if (bitmapOriginal != bitmapRotacionado) bitmapOriginal.recycle();
+            if (bitmapRotacionado != bitmapRedimensionado) bitmapRotacionado.recycle();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Falha ao carregar a imagem.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Bitmap carregarBitmapOtimizado(Uri uri) throws IOException {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        try (InputStream input = getContentResolver().openInputStream(uri)) {
+            if (input != null) {
+                BitmapFactory.decodeStream(input, null, options);
+            }
+        }
+
+        int larguraOriginal = options.outWidth;
+        int alturaOriginal = options.outHeight;
+        int inSampleSize = 1;
+
+        if (larguraOriginal > 1080 || alturaOriginal > 1080) {
+            final int metadeLargura = larguraOriginal / 2;
+            final int metadeAltura = alturaOriginal / 2;
+            while ((metadeLargura / inSampleSize) >= 1080 && (metadeAltura / inSampleSize) >= 1080) {
+                inSampleSize *= 2;
+            }
+        }
+
+        options.inSampleSize = inSampleSize;
+        options.inJustDecodeBounds = false;
+        try (InputStream input = getContentResolver().openInputStream(uri)) {
+            return BitmapFactory.decodeStream(input, null, options);
+        }
+    }
+
     private Bitmap rotacionarImagemSeNecessario(Bitmap img, Uri selectedImage) throws IOException {
-        ExifInterface ei = new ExifInterface(getContentResolver().openInputStream(selectedImage));
+        ExifInterface ei = new ExifInterface(Objects.requireNonNull(getContentResolver().openInputStream(selectedImage)));
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
         switch (orientation) {
@@ -246,9 +352,9 @@ public class Tela_Detalhes extends AppCompatActivity {
     }
 
 
-    private Bitmap redimensionarBitmap(Bitmap bitmap, int maxTamanho) {
+    private Bitmap redimensionarBitmap(Bitmap bitmap) {
         //se a imagem já for pequena o suficiente, não faz nada
-        if (bitmap.getHeight() <= maxTamanho && bitmap.getWidth() <= maxTamanho) {
+        if (bitmap.getHeight() <= 1080 && bitmap.getWidth() <= 1080) {
             return bitmap;
         }
 
@@ -258,10 +364,10 @@ public class Tela_Detalhes extends AppCompatActivity {
 
         //define as novas dimensões baseadas no lado maior da imagem
         if (largura > altura) {
-            largura = maxTamanho;
+            largura = 1080;
             altura = (int) (largura / proporcaoBitmap);
         } else {
-            altura = maxTamanho;
+            altura = 1080;
             largura = (int) (altura * proporcaoBitmap);
         }
         return Bitmap.createScaledBitmap(bitmap, largura, altura, true);
@@ -269,8 +375,11 @@ public class Tela_Detalhes extends AppCompatActivity {
 
     private void salvarImagemComprimida(Bitmap bitmapComprimido) {
         try {
+            SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
+            int userId = prefs.getInt("user_id", -1);
+
             File directory = getFilesDir();
-            String fileName = "denuncia_" + System.currentTimeMillis() + ".jpg";
+            String fileName = "user_" + userId + "_denuncia_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8) + ".jpg";
             File file = new File(directory, fileName);
 
             FileOutputStream fos = new FileOutputStream(file);
