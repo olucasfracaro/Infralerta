@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -41,6 +40,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,27 +53,29 @@ public class Tela_Mapas extends AppCompatActivity {
     String localselecionado;
     Drawable drawMarcador;
     MyLocationNewOverlay mLocationOverlay;
-    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
     private Address address;
-    private ArrayList<Marker> marcadoresNoMapa = new ArrayList<>();
+    private final ArrayList<Marker> marcadoresNoMapa = new ArrayList<>();
 
-    //User-Agent ÚNICO e MUITO ESPECÍFICO para evitar bloqueios do OSM
-    private static final String USER_AGENT = "InfralertaApp/1.0 (Android; contact: lucas.infralerta.dev@gmail.com)";
+    // User-Agent ÚNICO e MUITO ESPECÍFICO para evitar bloqueios do OSM (erro 403)
+    private static final String USER_AGENT = "Infralerta_Guarulhos_App_Android_Dev_Lucas_v2026";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Configuração do OSM deve vir ANTES do super.onCreate e setContentView
         Context ctx = getApplicationContext();
+
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         
-        // Força o User-Agent nas SharedPreferences e na Configuração
-        SharedPreferences osmPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        osmPrefs.edit().putString("osmdroid.useragent", USER_AGENT).apply();
-        
-        Configuration.getInstance().load(ctx, osmPrefs);
+        // Define o User-Agent e Referer de forma agressiva
         Configuration.getInstance().setUserAgentValue(USER_AGENT);
-        Configuration.getInstance().getAdditionalHttpRequestProperties().clear();
         Configuration.getInstance().getAdditionalHttpRequestProperties().put("User-Agent", USER_AGENT);
+        Configuration.getInstance().getAdditionalHttpRequestProperties().put("Referer", "http://infralerta.guarulhos.app");
+        
+        // Força uma nova pasta de cache para ignorar tiles 403 antigos salvos no disco
+        File osmdroidCache = new File(ctx.getCacheDir(), "osmdroid_fresh");
+        Configuration.getInstance().setOsmdroidBasePath(osmdroidCache);
+        Configuration.getInstance().setOsmdroidTileCache(new File(osmdroidCache, "tiles"));
+
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -231,48 +233,42 @@ public class Tela_Mapas extends AppCompatActivity {
     public void pesquisarEndereco() {
         String endereco = txtPesquisa.getText().toString() + ", Guarulhos";
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                GeocoderNominatim geocoder = new GeocoderNominatim(USER_AGENT);
-                try {
-                    List<Address> addressList = geocoder.getFromLocationName(endereco,1);
-                    if (addressList != null && !addressList.isEmpty()) {
-                        address = addressList.get(0);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                limparMarcadoresAntigos();
+        Thread thread = new Thread(() -> {
+            GeocoderNominatim geocoder = new GeocoderNominatim(USER_AGENT);
+            try {
+                List<Address> addressList = geocoder.getFromLocationName(endereco,1);
+                if (addressList != null && !addressList.isEmpty()) {
+                    address = addressList.get(0);
+                    runOnUiThread(() -> {
+                        limparMarcadoresAntigos();
 
-                                IMapController controlador = map.getController();
-                                GeoPoint locEndereco = new GeoPoint(address.getLatitude(),address.getLongitude());
-                                controlador = map.getController();
-                                controlador.animateTo(locEndereco);
-                                controlador.setZoom(19.0);
+                        IMapController controlador = map.getController();
+                        GeoPoint locEndereco = new GeoPoint(address.getLatitude(),address.getLongitude());
+                        controlador = map.getController();
+                        controlador.animateTo(locEndereco);
+                        controlador.setZoom(19.0);
 
-                                Marker marcadorPesquisa = new Marker(map);
-                                marcadorPesquisa.setTitle("Você pesquisou este endereco!");
-                                marcadorPesquisa.setSubDescription("Clique para dispensar essa mensagem");
-                                marcadorPesquisa.setPosition(locEndereco);
-                                marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                                marcadorPesquisa.setIcon(drawMarcador);
+                        Marker marcadorPesquisa = new Marker(map);
+                        marcadorPesquisa.setTitle("Você pesquisou este endereco!");
+                        marcadorPesquisa.setSubDescription("Clique para dispensar essa mensagem");
+                        marcadorPesquisa.setPosition(locEndereco);
+                        marcadorPesquisa.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                        marcadorPesquisa.setIcon(drawMarcador);
 
-                                map.getOverlays().add(marcadorPesquisa);
-                                marcadoresNoMapa.add(marcadorPesquisa);
-                                map.invalidate();
-                            }
-                        });
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(Tela_Mapas.this, "Local não encontrado. Pesquise uma localização de Guarulhos válida", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        map.getOverlays().add(marcadorPesquisa);
+                        marcadoresNoMapa.add(marcadorPesquisa);
+                        map.invalidate();
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(Tela_Mapas.this, "Local não encontrado. Pesquise uma localização de Guarulhos válida", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         thread.start();
@@ -341,7 +337,7 @@ public class Tela_Mapas extends AppCompatActivity {
     private void buscarEnderecoPorCoordenadas(GeoPoint p) {
         new Thread(() -> {
             GeocoderNominatim geocoder = new GeocoderNominatim(USER_AGENT);
-            String nomeEndereco = "";
+            String nomeEndereco;
             try {
                 //geocodificação reversa feita com getFromLocation
                 List<Address> enderecos = geocoder.getFromLocation(p.getLatitude(), p.getLongitude(), 1);
@@ -383,7 +379,7 @@ public class Tela_Mapas extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
@@ -407,6 +403,7 @@ public class Tela_Mapas extends AppCompatActivity {
             }
         }
         if (!permissoesParaPedir.isEmpty()) {
+            int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
             ActivityCompat.requestPermissions(
                     this,
                     permissoesParaPedir.toArray(new String[0]),
@@ -423,11 +420,6 @@ public class Tela_Mapas extends AppCompatActivity {
 
         FloatingActionButton btvoltartutorial = viewDialog.findViewById(R.id.btvoltartutorial);
 
-        btvoltartutorial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sheetDialog.dismiss();
-            }
-        });
+        btvoltartutorial.setOnClickListener(view -> sheetDialog.dismiss());
     }
 }

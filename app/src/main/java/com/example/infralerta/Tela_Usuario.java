@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -83,29 +85,49 @@ public class Tela_Usuario extends AppCompatActivity {
             trocarModoExibicao();
         });
 
-        fabSalvar.setOnClickListener(v -> {
-            salvarAlteracoes(userId);
-        });
+        fabSalvar.setOnClickListener(v -> salvarAlteracoes(userId));
 
-        //carrega os dados do usuário e atualiza a UI
+        carregarDadosCache(userId);
+
         if (userId != -1) {
-            carregarDados(userId);
+            carregarDadosSupabase(userId);
         } else {
             Toast.makeText(this, "Erro: Usuário não autenticado.", Toast.LENGTH_LONG).show();
-            logout(); //se não há ID, desloga por segurança
+            logout();
         }
 
         trocarModoExibicao();
     }
 
-    private void carregarDados(int userId) {
+    private void carregarDadosCache(int userId) {
+        BancoControllerUsuarios bd = new BancoControllerUsuarios(this);
+        try (android.database.Cursor dados = bd.carregarDadosUsuario(userId)) {
+            if (dados != null && dados.moveToFirst()) {
+                nome = dados.getString(dados.getColumnIndexOrThrow("nome"));
+                email = dados.getString(dados.getColumnIndexOrThrow("email"));
+                cpf = dados.getString(dados.getColumnIndexOrThrow("cpf"));
+
+                txtUSUNome.setText(nome);
+                txtUSUEmail.setText(email);
+                txtUSUCPF.setText(cpf);
+            }
+        } catch (Exception e) {
+            Log.e("Tela_Usuario", "Erro ao carregar dados do cache local", e);
+        }
+    }
+
+    private void carregarDadosSupabase(int userId) {
         SupabaseApi api = SupabaseClient.getApi();
         api.getUsuarioPorId(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + userId)
                 .enqueue(new Callback<List<Usuario>>() {
                     @Override
-                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                    public void onResponse(@NonNull Call<List<Usuario>> call, @NonNull Response<List<Usuario>> response) {
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                             Usuario u = response.body().get(0);
+
+                            BancoControllerUsuarios bd = new BancoControllerUsuarios(Tela_Usuario.this);
+                            bd.salvarUsuarioLocal(u);
+                            
                             nome = u.getNome();
                             email = u.getEmail();
                             cpf = u.getCpf();
@@ -113,14 +135,12 @@ public class Tela_Usuario extends AppCompatActivity {
                             txtUSUNome.setText(nome);
                             txtUSUEmail.setText(email);
                             txtUSUCPF.setText(cpf);
-                        } else {
-                            Toast.makeText(Tela_Usuario.this, "Erro ao carregar dados do Supabase.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
-                        Toast.makeText(Tela_Usuario.this, "Falha na conexão.", Toast.LENGTH_SHORT).show();
+                    public void onFailure(@NonNull Call<List<Usuario>> call, @NonNull Throwable t) {
+                        Log.e("Tela_Usuario", "Erro ao carregar do Supabase", t);
                     }
                 });
     }
@@ -169,10 +189,10 @@ public class Tela_Usuario extends AppCompatActivity {
     }
 
     private void salvarAlteracoes(int userId) {
-        String nomeNovo = inUSUNome.getText().toString().trim();
-        String emailNovo = inUSUEmail.getText().toString().trim();
-        String senhaNova = inUSUSenha.getText().toString();
-        String cpfNovo = inUSUCPF.getText().toString();
+        String nomeNovo = Objects.requireNonNull(inUSUNome.getText()).toString().trim();
+        String emailNovo = Objects.requireNonNull(inUSUEmail.getText()).toString().trim();
+        String senhaNova = Objects.requireNonNull(inUSUSenha.getText()).toString();
+        String cpfNovo = Objects.requireNonNull(inUSUCPF.getText()).toString();
 
         if (nomeNovo.isEmpty() || emailNovo.isEmpty() || cpfNovo.isEmpty()) {
             Toast.makeText(this, "Nome, e-mail e CPF são obrigatórios.", Toast.LENGTH_SHORT).show();
@@ -198,8 +218,6 @@ public class Tela_Usuario extends AppCompatActivity {
             return;
         }
 
-        // Para simplificar o objeto de atualização, vamos preencher tudo
-        // mas o ideal seria enviar apenas os campos alterados via Map.
         String senhaParaUpdate = senhaAlterada ? Tela_Cadastro.sha256(senhaNova) : null;
         
         Usuario usuarioUpdate = new Usuario(nomeNovo, emailNovo, senhaParaUpdate, cpfNovo);
@@ -208,10 +226,10 @@ public class Tela_Usuario extends AppCompatActivity {
         api.updateUsuario(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + userId, usuarioUpdate)
                 .enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(Tela_Usuario.this, "Dados alterados com sucesso!", Toast.LENGTH_SHORT).show();
-                            carregarDados(userId);
+                            carregarDadosSupabase(userId);
                             modoLeitura = true;
                             trocarModoExibicao();
                         } else {
@@ -220,7 +238,7 @@ public class Tela_Usuario extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                         Toast.makeText(Tela_Usuario.this, "Falha na conexão.", Toast.LENGTH_SHORT).show();
                     }
                 });

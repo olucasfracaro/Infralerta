@@ -150,4 +150,22 @@ public class BancoControllerUsuarios {
     public boolean verificarUsuarioExistente(String email, String cpf) {
         return buscarUserId(email, cpf) != -1;
     }
+
+    /**
+     * Salva ou atualiza os dados do usuário no cache local.
+     */
+    public void salvarUsuarioLocal(Usuario u) {
+        try (SQLiteDatabase db = bancoHelper.getWritableDatabase()) {
+            ContentValues valores = new ContentValues();
+            valores.put(COLUNA_USER_ID, u.getUserId());
+            valores.put(COLUNA_NOME, u.getNome());
+            valores.put(COLUNA_EMAIL, u.getEmail());
+            valores.put(COLUNA_SENHA, u.getSenha());
+            valores.put(COLUNA_CPF, u.getCpf());
+
+            db.insertWithOnConflict(TABELA_USUARIOS, null, valores, SQLiteDatabase.CONFLICT_REPLACE);
+        } catch (Exception e) {
+            Log.e("BancoController", "Erro ao salvar usuário no cache", e);
+        }
+    }
 }

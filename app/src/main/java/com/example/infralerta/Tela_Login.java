@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -71,11 +72,14 @@ public class Tela_Login extends AppCompatActivity {
         api.getUsuarioLogin(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + email, "eq." + senhaInseridaHash)
                 .enqueue(new Callback<List<Usuario>>() {
                     @Override
-                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                    public void onResponse(@NonNull Call<List<Usuario>> call, @NonNull Response<List<Usuario>> response) {
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                             //sucesso no login
                             Usuario usuario = response.body().get(0);
                             Integer user_id = usuario.getUserId();
+
+                            BancoControllerUsuarios bd = new BancoControllerUsuarios(Tela_Login.this);
+                            bd.salvarUsuarioLocal(usuario);
 
                             //user_id nas prefs
                             SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
@@ -98,7 +102,7 @@ public class Tela_Login extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                    public void onFailure(@NonNull Call<List<Usuario>> call, @NonNull Throwable t) {
                         Toast.makeText(Tela_Login.this, "Erro de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.e("Tela_Login", "Erro ao verificar dados de login", t);
                     }

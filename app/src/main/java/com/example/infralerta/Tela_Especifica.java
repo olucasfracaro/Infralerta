@@ -5,8 +5,6 @@ import android.graphics.BitmapFactory;
 import android.view.View;
 import java.io.File;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +13,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -42,6 +41,12 @@ public class Tela_Especifica extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Intent it = getIntent();
+        int denunciaId = it.getIntExtra("denuncia_id", -1);
+
+        if (denunciaId != -1) {
+            buscarDetalhesSupabase(denunciaId);
+        }
 
         imgDenuncia = findViewById(R.id.imgDenuncia);
 
@@ -53,12 +58,6 @@ public class Tela_Especifica extends AppCompatActivity {
         fabVoltar = findViewById(R.id.fabVoltar);
         fabVoltar.setOnClickListener(v -> finish());
 
-        Intent it = getIntent();
-        int denunciaId = it.getIntExtra("denuncia_id", -1);
-
-        if (denunciaId != -1) {
-            buscarDetalhesSupabase(denunciaId);
-        }
     }
 
     private void buscarDetalhesSupabase(int denunciaId) {
@@ -66,7 +65,7 @@ public class Tela_Especifica extends AppCompatActivity {
         api.getDenunciaPorId(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + denunciaId)
                 .enqueue(new Callback<List<Denuncia>>() {
                     @Override
-                    public void onResponse(Call<List<Denuncia>> call, Response<List<Denuncia>> response) {
+                    public void onResponse(@NonNull Call<List<Denuncia>> call, @NonNull Response<List<Denuncia>> response) {
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                             Denuncia denuncia = response.body().get(0);
                             exibirDados(denuncia);
@@ -76,7 +75,7 @@ public class Tela_Especifica extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Denuncia>> call, Throwable t) {
+                    public void onFailure(@NonNull Call<List<Denuncia>> call, @NonNull Throwable t) {
                         Toast.makeText(Tela_Especifica.this, "Falha na conexão.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -102,7 +101,7 @@ public class Tela_Especifica extends AppCompatActivity {
 
         txtLocal.setText(denuncia.getEndereco());
         txtData.setText(denuncia.getData());
-        txtProblemas.setText(denuncia.getProblemas().replaceAll(";", "\n"));
+        txtProblemas.setText(denuncia.getProblemas().replace(";", "\n"));
         txtDetalhamento.setText(denuncia.getDescricao());
     }
 }

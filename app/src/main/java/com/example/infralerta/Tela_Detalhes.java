@@ -3,6 +3,8 @@ package com.example.infralerta;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+
+import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.graphics.Matrix;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -108,6 +111,7 @@ public class Tela_Detalhes extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
             int userId = prefs.getInt("user_id", -1);
 
+            assert problemas != null;
             String problemasStr = problemasParaString(problemas);
             String descricao = txtDetalhamento.getText().toString();
 
@@ -141,7 +145,7 @@ public class Tela_Detalhes extends AppCompatActivity {
                 requestBody
         ).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     String urlPublica = SupabaseClient.BASE_URL + "/storage/v1/object/public/imagens_denuncias/" + nomeArquivoNoServidor;
                     denuncia.setCaminhoImagem(urlPublica);
@@ -152,7 +156,7 @@ public class Tela_Detalhes extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(Tela_Detalhes.this, "Falha na rede ao subir imagem", Toast.LENGTH_SHORT).show();
             }
         });
@@ -165,8 +169,11 @@ public class Tela_Detalhes extends AppCompatActivity {
                 denuncia
         ).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
+                    BancoControllerDenuncias bd = new BancoControllerDenuncias(Tela_Detalhes.this);
+                    bd.criarDenuncia(denuncia);
+
                     Toast.makeText(Tela_Detalhes.this, "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show();
                     Intent it = new Intent(Tela_Detalhes.this, Tela_Mapas.class);
                     it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -178,7 +185,7 @@ public class Tela_Detalhes extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 Toast.makeText(Tela_Detalhes.this, "Falha na conexão com Supabase", Toast.LENGTH_SHORT).show();
             }
         });
@@ -199,7 +206,7 @@ public class Tela_Detalhes extends AppCompatActivity {
                     Bitmap bitmapRotacionado = rotacionarImagemSeNecessario(bitmapOriginal, imageUri);
 
                     //redimensiona o bitmap rotacionado
-                    Bitmap bitmapRedimensionado = redimensionarBitmap(bitmapRotacionado, 1080);
+                    Bitmap bitmapRedimensionado = redimensionarBitmap(bitmapRotacionado);
 
                     mcvImagem.setVisibility(View.VISIBLE);
                     imgDenuncia.setImageBitmap(bitmapRedimensionado);
@@ -223,7 +230,7 @@ public class Tela_Detalhes extends AppCompatActivity {
     }
 
     private Bitmap rotacionarImagemSeNecessario(Bitmap img, Uri selectedImage) throws IOException {
-        ExifInterface ei = new ExifInterface(getContentResolver().openInputStream(selectedImage));
+        ExifInterface ei = new ExifInterface(Objects.requireNonNull(getContentResolver().openInputStream(selectedImage)));
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
         switch (orientation) {
@@ -246,9 +253,9 @@ public class Tela_Detalhes extends AppCompatActivity {
     }
 
 
-    private Bitmap redimensionarBitmap(Bitmap bitmap, int maxTamanho) {
+    private Bitmap redimensionarBitmap(Bitmap bitmap) {
         //se a imagem já for pequena o suficiente, não faz nada
-        if (bitmap.getHeight() <= maxTamanho && bitmap.getWidth() <= maxTamanho) {
+        if (bitmap.getHeight() <= 1080 && bitmap.getWidth() <= 1080) {
             return bitmap;
         }
 
@@ -258,10 +265,10 @@ public class Tela_Detalhes extends AppCompatActivity {
 
         //define as novas dimensões baseadas no lado maior da imagem
         if (largura > altura) {
-            largura = maxTamanho;
+            largura = 1080;
             altura = (int) (largura / proporcaoBitmap);
         } else {
-            altura = maxTamanho;
+            altura = 1080;
             largura = (int) (altura * proporcaoBitmap);
         }
         return Bitmap.createScaledBitmap(bitmap, largura, altura, true);

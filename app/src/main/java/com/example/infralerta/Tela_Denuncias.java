@@ -3,11 +3,13 @@ package com.example.infralerta;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -17,7 +19,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -47,7 +48,17 @@ public class Tela_Denuncias extends AppCompatActivity {
         int userId = prefs.getInt("user_id", -1);
 
         if (userId != -1) {
+            carregarDenunciasCache(userId);
+
             carregarDenunciasSupabase(userId);
+        }
+    }
+
+    private void carregarDenunciasCache(int userId) {
+        BancoControllerDenuncias bd = new BancoControllerDenuncias(this);
+        ArrayList<Denuncia> denunciasCache = bd.buscarTodasDenunciasCache(userId);
+        if (!denunciasCache.isEmpty()) {
+            exibirDenuncias(denunciasCache);
         }
     }
 
@@ -56,22 +67,29 @@ public class Tela_Denuncias extends AppCompatActivity {
         api.getDenunciasPorUsuario(SupabaseClient.ANON_KEY, "Bearer " + SupabaseClient.ANON_KEY, "eq." + userId)
                 .enqueue(new Callback<List<Denuncia>>() {
                     @Override
-                    public void onResponse(Call<List<Denuncia>> call, Response<List<Denuncia>> response) {
+                    public void onResponse(@NonNull Call<List<Denuncia>> call, @NonNull Response<List<Denuncia>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             ArrayList<Denuncia> denuncias = new ArrayList<>(response.body());
+                            
+                            //atualiza o cache local com os novos dados (incluindo remoção de deletados)
+                            BancoControllerDenuncias bd = new BancoControllerDenuncias(Tela_Denuncias.this);
+                            bd.sincronizarCache(userId, denuncias);
+                            
+                            //atualiza a tela com os dados mais recentes
                             exibirDenuncias(denuncias);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Denuncia>> call, Throwable t) {
-                        // Tratar erro
+                    public void onFailure(@NonNull Call<List<Denuncia>> call, @NonNull Throwable t) {
+                        Log.e("Tela_Denuncias", "Erro ao carregar do Supabase", t);
                     }
                 });
     }
 
     private void exibirDenuncias(ArrayList<Denuncia> denuncias) {
-        denuncias.sort(Comparator.comparing(Denuncia::getEndereco, String.CASE_INSENSITIVE_ORDER));
+        //ordenar pelo ID (mais recentes primeiro)
+        denuncias.sort((d1, d2) -> Integer.compare(d2.getDenunciaId(), d1.getDenunciaId()));
 
         llDenuncias.removeAllViews();
 
